@@ -45,13 +45,6 @@ If they ask you only for counts, just calculate them. Don't actually permute. Th
 
 <a href="https://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java">All combinations of a list of elements</a>:
 
-	```Python
-	import itertools
-	stuff = [1, 2, 3]
-	for L in range(0, len(stuff)+1):
-    		for subset in itertools.combinations(stuff, L):
-        		print(subset)
-    ```
 Basics:
 - Binary, Hex, Decimal interconversion. Binary or Hex to decimal, vice versa
 - DO NOT GIVE UP
@@ -103,8 +96,11 @@ SOPln(s.toString());
 - LinkedLists are a collection of objects/structs in continuous memory locations
 - You can also iterate through LinkedLists using pointers. In C/C++, it can be done by manipulating pointers
 - The "Runner" method is also quite common for LinkedLists
+- Accessing: O(n)
+- Adding: O(1)
 - LinkedLists can also be accessed recursively:
 
+	```java
 	void traverse(Node head) {
 		if(head != null) {
 			processData(head.data); // Here for forwards
@@ -112,12 +108,7 @@ SOPln(s.toString());
 			processData(head.data) // Here for backwards
 		}	
 	}
-
-Accessing: O(n)
-
-Adding: O(1)
-
-	```Java
+	
 	Class Node {
 	int data;
 	Node next = null;
@@ -193,7 +184,8 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 		- Ref <a href="https://www.geeksforgeeks.org/queue-using-stacks/">here</a>
 - Sort Stack:
 	- Poelements out from the input stack. With the popped element, push all the temp elements into the input stacks that are bigger than the element popped from the input stack. Once this is done, push the input pop into the temp stack. Repeat this for every input element. This way, you're basically popping out elements, and recycling them until you find the right one.
-	```Java
+	
+	```java
 	public static Stack<Integer> sortstack(Stack<Integer> input) { 
     	Stack<Integer> tmpStack = new Stack<Integer>(); 
     	while(!input.isEmpty()) { 
@@ -228,7 +220,8 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- Post Order
 	- Pre Order
 	- In Order
-	```Java
+	
+	```java
 	void inOrder(Node node) {
 		if (node != null) {
 			inOrder(node.left);
@@ -236,8 +229,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 			inOrder(node.right);
 		}
 	}
-	```
-	```Java
+
 	void postOrder(Node node) {
 		if (node != null) {
 			postOrder(node.left);
@@ -245,8 +237,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 			print(node.value);
 		}
 	}
-	```
-	```Java
+
 	void preOrder(Node node) {
 		if (node != null) {
 			print(node.value);
@@ -277,11 +268,11 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - An <b>acyclic</b> graph is one without cycles.
 - Graphs can be represented by either:
 	- Adjacency Lists:
-		a) Every node/vertex stores a list of adjancent vertices
-		b) If the graph is undirected, then an edge between (a,b) would be both in a, and in b's adjacency list
+		- Every node/vertex stores a list of adjancent vertices <br>
+		- If the graph is undirected, then an edge between (a,b) would be both in a, and in b's adjacency list<br>
 	- Adjacency Matrices:
-		a) An adjacency matrix is an N x M boolean matrix, where a true value of mat[i][j] indicates the presence of an edge from i->j.
-		b) In an undirected graph, an adjacency matrix will be symmetric. It's not necessarily so in a directed graph
+		- An adjacency matrix is an N x M boolean matrix, where a true value of mat[i][j] indicates the presence of an edge from i->j.
+		- In an undirected graph, an adjacency matrix will be symmetric. It's not necessarily so in a directed graph
 	- The same graph search algorithms used on adjacency lists can be used on matrices, but they may be slightly less efficient. Adjacency lists make it easy to iterate through the neighbours of a node, while adjacency matrices make this slightly more difficult.
 - Graphs have two main search algorithms: <b>Depth First Search</b> and <b>Breadth First Search</b>
 - BFS of a binary tree is the same as an <b>in-order</b> traversal
@@ -291,21 +282,22 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 
 #### Breadth First Search
 - Algorithm:
-	a) Pick an arbitrary vertex
-	b) Explore all the adjacent vertices, to do with that vertex
-	c) Move on to the next vertex, and visit all adjacent vertices
-	d) And so on...
+	- Pick an arbitrary vertex
+	- Explore all the adjacent vertices, to do with that vertex
+	- Move on to the next vertex, and visit all adjacent vertices
+	- And so on...
 - For BFS, you visit all adjacent vertices, before moving on to the next vertex. For DFS you just keep picking vertices and proceeding. You don't visit <b>every</b> unvisited adjacent vertex.
 - <b>BFS is NOT recursive</b>
 - Implementation of BFS for a graph requires the use of a Queue
-	a) Pick an arbitrary element, and add it to Q
-	b) Pop Q, and then explore the vertex. As you explore, once again, add the visited vertices to Q. Output the values explored.
-	c) Pop the next vertex to explore from Q, and explore the same. Check to see if vertices are in the Q or not, to see if they're already explored.
-	d) When Q has no more elements to pop, then BFS is complete.
+	- Pick an arbitrary element, and add it to Q
+	- Pop Q, and then explore the vertex. As you explore, once again, add the visited vertices to Q. Output the values explored.
+	- Pop the next vertex to explore from Q, and explore the same. Check to see if vertices are in the Q or not, to see if they're already explored.
+	- When Q has no more elements to pop, then BFS is complete.
 - The tree that results in BFS -> BFS spanning tree. Construct this based on visits, and then the adjacent nodes visited by the exploration.
 - When you select a vertex for exploration, <b>explore all the adjacent verticies before moving on to explore the next vertex</b>
 - Selecting the next vertex for exploration has to be picked out of a Queue <b>alone</b>
-	```Java
+
+	```java
 	void search(Node root) {
 		Queue q = new Queue();
 		root.visited = True;
@@ -328,6 +320,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - O(V+E)
 - Isn't that useful by itself, but while augmented, it can perform things like counting connected components, determining connectivity, etc
 - You literally plunge into any node, and traverse all the edges, backtracking when you can't go to any other node from a position. Once you backtrack, <b>then</b> you continue the exploration.
+
 	```python
 	n = (nodes)
 	g = [adjacency list]
@@ -347,6 +340,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	```
 - Finding connected components:
 	- Counting multiple disjoint componenets. Start dfs at [0,n] and find the number of connected elements. This helps you find multiple connected componenets
+	
 	```python
 	n = (nodes)
 	g = [adjacency list]
@@ -372,13 +366,14 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	```
 
 - Another implementation of DFS involves using a Stack to track vertices which we're yet to explore.
-	a) Visit an arbitraty vertex, and find any <b>one</b> connected vertex.
-	b) Push the original vertex to the Stack, and start exploring the vertex you just navigated to
-	c) Carry this on, suspending vertices and adding them to the Stack. When you don't have any edges on a vertex, <b>revert</b> to an earlier vertex by popping the stack
+	- Visit an arbitraty vertex, and find any <b>one</b> connected vertex.
+	- Push the original vertex to the Stack, and start exploring the vertex you just navigated to
+	- Carry this on, suspending vertices and adding them to the Stack. When you don't have any edges on a vertex, <b>revert</b> to an earlier vertex by popping the stack
 
 ##### Common uses
 
 - Using DFS to find cycles:
+
 	```python
 	def isCyclicUtil(v, visited, recStack): 
 		visited[v] = True
@@ -413,7 +408,8 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Used to get an ordering of the vertices
 - Used to get a list of courses to take, in order to comply with a graph of CS pre-reqs
 - Ref <a href="https://www.youtube.com/watch?v=Q9PIxaNGnig">here</a>
-	
+
+	```python
 	def topSortUtil(v, visited, stack):
 		visited[v] = True
 		for i in graph[v]:
@@ -421,7 +417,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 			if !visited[i]:
 				topSortUtil(v, visited, stack)
 		stack.insert(0,v)
-
+		
 	def topSort():
 		visited = [False] * vertex
 		stack = []
@@ -430,6 +426,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 			if !visited[i]:
 				self.topSortUtil(i,visited,stack)
 		printStack(stack) # This is the topsorted list of nodes
+	```
 
 ### Dijkstra's Algorithm
 - Ref <a href="https://www.youtube.com/watch?v=XB4MIexjvY0&t=233s">here</a>
@@ -483,26 +480,6 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 
 ### AVL Trees
 - Trees that automatically do rotations to become BST's - used to combat the issues faced by using BSTs.
-
-## Notes for Microsoft's OnSite:
-
-- Smart, passionate about tech [give off vibe]
-- 3, 4 tech rounds, be super nice to the recruiter
-
-Why do you want to work for Microsoft?
-- Satya Nadella's <a href="https://www.youtube.com/watch?v=ux4R5GeKMUU">Marques Brownlee interview</a> - "Empowering others through our technology"
-	- "Meeting unmet, and unarticulated needs of our customers"
-- Over the past year, I've realised that while I love tech and computer science, my passion lies in impacting people and lives for the better. 
-- The world runs on Microsoft tech. Be it Azure, Windows, or Github, Microsoft's tech stack impacts the world in ways that no other tech company can - it enables the innovation that makes the world a better place, day by day
-- Microsoft products are always held to the highest standard - be it Windows, the hololens which I developed with in HS, or the Xbox One, LinkedIn, or even VSCode, everyone always targets Microsoft as the one to beat. That tells you a lot.
-- Microsoft, if I remember correctly made over 30 billion in revenue in Q4 from its suite of products, which shows its sheet power and reach. This isn't a company, this is a movement. It's a movement that I'd love to be a part of.
-
-Weaknesses:
-- I get excited about ideas or products sometimes => I go very fast, miss out on details. This is why I always force myself to take a deep breath after I finish, and re-check my code every time.
-
-Questions for them:
-- How does project planning work? What do Cloud Platform Engineers work on? It it products like Azure?
-- What's been your most memorable Microsoft moment?
 
 
 
