@@ -447,8 +447,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 		vertices = self.vertices.copy()
 		while vertices:
 		    # Select the unvisited node with the smallest distance, it's current node now.
-		    current_vertex = min(
-			vertices, key=lambda vertex: distances[vertex])
+		    current_vertex = min(vertices, key=lambda vertex: distances[vertex])
 		    # Stop, if the smallest distance among the unvisited nodes is infinity.
 		    if distances[current_vertex] == inf:
 			break
