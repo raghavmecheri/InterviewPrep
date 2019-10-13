@@ -440,34 +440,34 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 		# Mark all nodes unvisited and store them.
 		# Set the distance to zero for our initial node and to infinity for other nodes.
 		distances = {vertex: inf for vertex in self.vertices}
-        previous_vertices = {
-            vertex: None for vertex in self.vertices
-        }
-        distances[source] = 0
-        vertices = self.vertices.copy()
-        while vertices:
-            # Select the unvisited node with the smallest distance, it's current node now.
-            current_vertex = min(
-                vertices, key=lambda vertex: distances[vertex])
-            # Stop, if the smallest distance among the unvisited nodes is infinity.
-            if distances[current_vertex] == inf:
-                break
-            # Find unvisited neighbors for the current node and calculate their distances through the current node.
-            for neighbour, cost in self.neighbours[current_vertex]:
-                alternative_route = distances[current_vertex] + cost
-                # Compare the newly calculated distance to the assigned and save the smaller one.
-                if alternative_route < distances[neighbour]:
-                    distances[neighbour] = alternative_route
-                    previous_vertices[neighbour] = current_vertex
-            # Mark the current node as visited and remove it from the unvisited set.
-            vertices.remove(current_vertex)
-        path, current_vertex = deque(), dest
-        while previous_vertices[current_vertex] is not None:
-            path.appendleft(current_vertex)
-            current_vertex = previous_vertices[current_vertex]
-        if path:
-            path.appendleft(current_vertex)
-        return path
+		previous_vertices = {
+		    vertex: None for vertex in self.vertices
+		}
+		distances[source] = 0
+		vertices = self.vertices.copy()
+		while vertices:
+		    # Select the unvisited node with the smallest distance, it's current node now.
+		    current_vertex = min(
+			vertices, key=lambda vertex: distances[vertex])
+		    # Stop, if the smallest distance among the unvisited nodes is infinity.
+		    if distances[current_vertex] == inf:
+			break
+		    # Find unvisited neighbors for the current node and calculate their distances through the current node.
+		    for neighbour, cost in self.neighbours[current_vertex]:
+			alternative_route = distances[current_vertex] + cost
+			# Compare the newly calculated distance to the assigned and save the smaller one.
+			if alternative_route < distances[neighbour]:
+			    distances[neighbour] = alternative_route
+			    previous_vertices[neighbour] = current_vertex
+		    # Mark the current node as visited and remove it from the unvisited set.
+		    vertices.remove(current_vertex)
+		path, current_vertex = deque(), dest
+		while previous_vertices[current_vertex] is not None:
+		    path.appendleft(current_vertex)
+		    current_vertex = previous_vertices[current_vertex]
+		if path:
+		    path.appendleft(current_vertex)
+		return path
 	```
 
 
