@@ -17,6 +17,7 @@ Interview notes and common questions for multiple topics. Useful to review, mayb
 	- Straight recursion, on the other hand - generally O(n)
 	- When arrays are different and being iterated nested-ly => O(ab) - this can happen
 	- When you have multiple variables [length of a string, length of an array] -> use a,b,c,x - don't use N to avoid mixups
+	
 Solving a problem:
 - Listen carefully (details - sorted array, run repeatedly => do we want to cache data?)
 - Draw it out - good for showing your thought process
