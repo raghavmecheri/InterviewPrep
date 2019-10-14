@@ -83,7 +83,7 @@ SOPln(s.toString());
 	- More efficient than moving the elements each towards the end. <b>That</b> approach would be O(n^2)
 - Permutation of a Palindrome:
 	 - Use a hashmap to count the number of occurances of each character
-	 - All should be even <b>except one</b> 
+	 - All should be even <b>except at most one</b> 
 - Compare two strings to check if they're one edit away:
 	- Again, either use a HashMap (<b>Do you see a trend here</b>) or just sort, and then check for difference
 - String compression["aaaabbbcccc" -> "a4b3c4"]:
