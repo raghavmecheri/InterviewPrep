@@ -7,7 +7,7 @@ Interview notes and common questions for multiple topics. Useful to review, mayb
 	- Big Omega - Best Case
 	- Big Theta - Average case
 - Big O and Big Theta [worst and expected] are usually the same - we generally deal with these two
-- Space complexity matters to: Recursion generally creates more calls on the stack -> more space occupied
+- Space complexity matters too: Recursion generally creates more calls on the stack -> more space occupied
 - Drop constants and non-dominant terms
 - Common computations
 	- Sequential operations => Add
