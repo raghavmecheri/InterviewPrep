@@ -34,7 +34,7 @@ Solving a problem:
 
 Remember:
 - nPr is the <b>number of permutations</b>
-- cNr is the <b>number of combinations</b>
+- nCr is the <b>number of combinations</b>
 
 If they ask you only for counts, just calculate them. Don't actually permute. This saves a bunch of runtime
 
