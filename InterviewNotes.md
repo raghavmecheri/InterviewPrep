@@ -471,7 +471,20 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 		    path.appendleft(current_vertex)
 		return path
 	```
+- For a graph of N verticles and E edges, you can form => (E choose (N-1)) - number of cycles
+- <b>You can't find spanning trees for non-connected components </b>
+- <a href="https://www.youtube.com/watch?v=4ZlRH0eK-qQ">Ref for Prim's and Kruskal's</a>
 
+### Prim's Algorithm
+- Used to find the minimum spanning tree from a graph
+- Algorithm:
+	- Always the minimum edge that's connected to the starting element
+	- Typical greedy algorithm
+
+### Kruskal's Algorithm
+- Always select the minimum cost edge, they don't have to be connected to each other
+- If an edge is forming a cycle, then <b>don't</b> select it
+- O(n2) without MinHeap, O(nlogn) with MinHeap
 
 ### Bidirectional Search
 - Part of Dijkstra's Algorithm
