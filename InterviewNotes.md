@@ -282,6 +282,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - DFS of a binary tree is the same as an <b>pre-order</b> traversal
 - The edges in a DFS/BFS spanning tree which were present on the original graph but not on the spanning tree -> cross edges
 - <a href="https://www.youtube.com/watch?v=pcKY4hjDrxk">For BFS and DFS</a>
+- <a href="https://www.youtube.com/watch?v=zaBhtODEL0w">Also for BFS and DFS</a>
 
 #### Breadth First Search
 - Algorithm:
