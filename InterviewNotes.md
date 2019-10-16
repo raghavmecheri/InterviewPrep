@@ -318,6 +318,22 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 		}
 	}
 	```
+- BFS of a Binary Tree is just a level order tree traversal
+
+	```python
+	def printLevelorder(tree):
+		for h in range(1, findHeight(tree))
+   			printGivenLevel(tree, h);
+
+	def printGivenLevel(tree, level):
+		if tree == None:
+			return
+		if level==1:
+    			print(tree->data);
+    		else:
+    			printGivenLevel(tree.left, level-1);
+    			printGivenLevel(tree.right, level-1);
+	```
 
 #### Depth First Search
 - Allows you to visit nodes and edges of a graph
