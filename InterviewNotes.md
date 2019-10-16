@@ -329,7 +329,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 		if tree == None:
 			return
 		if level==1:
-    			print(tree->data);
+    			print(tree.data);
     		else:
     			printGivenLevel(tree.left, level-1);
     			printGivenLevel(tree.right, level-1);
