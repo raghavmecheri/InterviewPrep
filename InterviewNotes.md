@@ -320,19 +320,40 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	```
 - BFS of a Binary Tree is just a level order tree traversal
 
-	```python
-	def printLevelorder(tree):
-		for h in range(1, findHeight(tree))
-   			printGivenLevel(tree, h);
-
-	def printGivenLevel(tree, level):
-		if tree == None:
-			return
-		if level==1:
-    			print(tree.data);
-    		else:
-    			printGivenLevel(tree.left, level-1);
-    			printGivenLevel(tree.right, level-1);
+	```java
+	class Solution {
+	    public List<List<Integer>> levelOrder(TreeNode root) {
+		int height = getTreeHeight(root);
+		List<List<Integer>> traversal = new ArrayList<List<Integer>>();
+		List<Integer> temp = new ArrayList<Integer>();
+		for(int i = 1; i <=height; i++) {
+		    List<Integer> holdElements = new ArrayList<Integer>();
+		    temp = doLevelOrder(root, i, holdElements);
+		    traversal.add(temp);
+		}
+		return traversal;
+	    }
+	    private List<Integer> doLevelOrder(TreeNode root, int level, List<Integer> myTrav) {
+		if(root == null) {
+		    // This doesn't do much, just serves as an exit
+		    return null;
+		}
+		if(level == 1) {
+		    // You could either add, or ditch the list and just print here. In that case, you wouldn't return
+		    myTrav.add(root.val);
+		}
+		doLevelOrder(root.left, level-1, myTrav);
+		doLevelOrder(root.right, level-1, myTrav);
+		// At this point, the level order has been completed.
+		return myTrav;
+	    }
+	    private int getTreeHeight(TreeNode root) {
+		if(root == null) {
+		    return 0;
+		}
+		return Math.max(getTreeHeight(root.left), getTreeHeight(root.right)) + 1;
+	    }
+	}
 	```
 
 #### Depth First Search
