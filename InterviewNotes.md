@@ -706,6 +706,51 @@ Algorithm:
 	- When their searches collide, we've found a path
 - Reduces the amount of exploration needed. Ref <a href="https://www.geeksforgeeks.org/bidirectional-search/">here</a>
 
+
+## Binary Search
+- O(logn) complexity
+- Divide and conquer
+- Splits the array based on the middle value, and keeps searching
+- Works for sorted arrays
+	```python
+	def binarySearch(arr, x):
+		l = 0
+		r = len(arr)-1
+		# Loop while left is less than right
+		while(l < r):
+			# Set the middle, work based on this
+			mid = l+((r-l)/2)
+			# If you find it, get out
+			if arr[mid] == x:
+				return mid
+			# If the middle is too big, use the first half
+			else if arr[mid] > x:
+				r = mid-1
+			# If the middle is too small, use the second half
+			else:
+				l = mid+1
+		# If nothing worked, it doesn't exist
+		return -1
+
+	def rec_binarySearch(arr, left, right, x): 
+		# Check base case
+		if(l > r):
+			return -1
+		mp = (r - l)/2
+		mid = l + mp
+		# If element is present at the middle itself 
+		if arr[mid] == x: 
+			return mid 
+		# If element is smaller than mid, then it  
+		# can only be present in left subarray 
+		elif arr[mid] > x: 
+			return binarySearch(arr, l, mid-1, x) 
+		# Else the element can only be present  
+		# in right subarray 
+		else: 
+			return binarySearch(arr, mid+1, r, x) 
+	```
+
 # Topic 2: Sorting Algorithms
 
 A list of useful sorting algorithms
