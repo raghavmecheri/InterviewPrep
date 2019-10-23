@@ -219,6 +219,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - A <b>complete</b> Binary Tree is one where every level is fully filled, except the last one
 - A <b>full</b> Binary Tree is one where every node has either zero or two children
 - A <b>perfect</b> binary tree is one that's both full, and complete. All the nodes are at the same level, and this last level has the maximum number of nodes.
+
 - Traversals:
 	- Post Order
 	- Pre Order
@@ -250,6 +251,44 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	}
 	```
 
+- Level order tree traversal of a binary tree
+
+	```java
+	class Solution {
+	    public List<List<Integer>> levelOrder(TreeNode root) {
+			int height = getTreeHeight(root);
+			List<List<Integer>> traversal = new ArrayList<List<Integer>>();
+			List<Integer> temp = new ArrayList<Integer>();
+			for(int i = 1; i <=height; i++) {
+				List<Integer> holdElements = new ArrayList<Integer>();
+				temp = doLevelOrder(root, i, holdElements);
+				traversal.add(temp);
+			}
+			return traversal;
+	    }
+	    private List<Integer> doLevelOrder(TreeNode root, int level, List<Integer> myTrav) {
+			if(root == null) {
+				// This doesn't do much, just serves as an exit
+				return null;
+			}
+			if(level == 1) {
+				// You could either add, or ditch the list and just print here. In that case, you wouldn't return
+				myTrav.add(root.val);
+			}
+			doLevelOrder(root.left, level-1, myTrav);
+			doLevelOrder(root.right, level-1, myTrav);
+			// At this point, the level order has been completed.
+			return myTrav;
+	    }
+	    private int getTreeHeight(TreeNode root) {
+			if(root == null) {
+				return 0;
+			}
+			return Math.max(getTreeHeight(root.left), getTreeHeight(root.right)) + 1;
+	    }
+	}
+	```
+
 ### Heaps
 
 - A min/max heap is a complete binary tree, where each node has a value that is smaller (in the case of a min heap) or larger (in the case of a max heap) than it's children. Hence, the root is the <b>minimum (MinHeap) or maximum (MaxHeap) element in a tree</b>
@@ -263,6 +302,9 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Generally, a trie can be used to store the entire english language for quick prefix lookups. Since you go down and have various branches (like a tree) it's far more effective than a HashMap is for completion options. A HashMap would be far more efficient for absolute checks.
 - A trie can check if a string is a valid prefix in O(n), where n -> length of the string
 
+### AVL Trees
+- Trees that automatically do rotations to become BST's - used to combat the issues faced by using BSTs.
+
 ### Graphs
 
 - Tree is a type of graph, but not all graphs are trees. Trees are connected graphs without cycles.
@@ -270,13 +312,14 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Graph edges can be either directed, or undirected. It can have multiple sub-graphs, or not. If every vertex has a path between it, it's a directed graph.
 - An <b>acyclic</b> graph is one without cycles.
 - Graphs can be represented by either:
-	- Adjacency Lists:
+	- Adjacency Lists [Space: O(E+N)]:
 		- Every node/vertex stores a list of adjancent vertices <br>
 		- If the graph is undirected, then an edge between (a,b) would be both in a, and in b's adjacency list<br>
-	- Adjacency Matrices:
+	- Adjacency Matrices [Space: O(|V|^(2)]:
 		- An adjacency matrix is an N x M boolean matrix, where a true value of mat[i][j] indicates the presence of an edge from i->j.
 		- In an undirected graph, an adjacency matrix will be symmetric. It's not necessarily so in a directed graph
 	- The same graph search algorithms used on adjacency lists can be used on matrices, but they may be slightly less efficient. Adjacency lists make it easy to iterate through the neighbours of a node, while adjacency matrices make this slightly more difficult.
+	- Adjacency List if the graph is <b>sparse</b>, Adjacency Matrix if it's <b>dense</b>
 - Graphs have two main search algorithms: <b>Depth First Search</b> and <b>Breadth First Search</b>
 - BFS of a binary tree is the same as an <b>in-order</b> traversal
 - DFS of a binary tree is the same as an <b>pre-order</b> traversal
@@ -301,60 +344,244 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - When you select a vertex for exploration, <b>explore all the adjacent verticies before moving on to explore the next vertex</b>
 - Selecting the next vertex for exploration has to be picked out of a Queue <b>alone</b>
 
+### Topological Sort
+- Graph has to be directed, acyclic.
+- Since it's a modified DFS, O(V+E)
+- Used to get an ordering of the vertices
+- Used to get a list of courses to take, in order to comply with a graph of CS pre-reqs
+- You can either use root.visited, or use indegrees to track visited nodes
+- Ref <a href="https://www.youtube.com/watch?v=Q9PIxaNGnig">here</a>
+
 	```java
-	void search(Node root) {
+	void search(Node root) throws CycleFoundException {
 		Queue q = new Queue();
-		root.visited = True;
+		root.visited = true;
 		q.enqueue(root);
+		int counter = 0;
 		while(!q.isEmpty()) {
 			Node x = q.dequeue();
-			visit(x);
+			// Here is where you act on the node. You either visit, or you just order
+			x.topologicalNumber = ++counter;
+			// visit(x);
 			for(Node r in x.adjacent) {
-				if(r.visited == False) {
-					r.visited == True;
+				if(r.visited == false) {
+					r.visited == true;
 					queue.enqueue(r);
+				}
+			}
+		}
+		if(counter != NUM_VERTICIES) {
+			throw new CycleFoundException();
+		}
+	}
+	```
+
+	```java
+	void topsort() throws CycleFoundException {
+		Queue<Vertex>q = new Queue<Vertex>();
+		int counter = 0;
+
+		for each vertex {
+			if (vertex.indegree == 0) {
+				// Every vertex with an indegree of 0 goes into the queue
+				q.enqueue(v);
+			}
+
+			while(!q.isEmpty()) {
+				Vertex v = q.dequeue();
+				// Top num represents its topological ordering
+				v.topNum = ++counter;
+
+				for(Vertex w in v.adjacencyList) {
+					if(--w.indegree == 0) {
+						q.enqueue(w);
+					}
+				}
+			}
+
+			if(counter != NUM_VERTICES) {
+				throw new CycleFoundException();
+			}
+		}
+	}
+	```
+
+### Shortest Path Algorithms
+- For an unweighted graph, it's the smallest amount of edges that need to be traversed to go from vertex i to vertex j
+- For a weighted graph, it's the minimal costing path that can be taken to go from vertex i to vertex j
+- O(V+E)
+
+#### Unweighted Graph:
+- A simple <b>breath first search works</b>, where you track the distances
+
+	```java
+	void bfs_path(Vertex root) {
+		Queue<Vertex> q = new Queue<Vertex>();
+		for Vertex x in allVertices {
+			x.dist = INFINITY;
+		}
+
+		root.dist = 0;
+		
+		q.enqueue(root);
+
+		while(!q.isEmpty()) {
+			Vertex v = q.dequeue();
+			List<Vertex> adjList = q.adjList;
+
+			for(Vertex w in adjList) {
+				// We use the dist to check if it's been visited
+				if(w.dist == INFINITY) {
+					w.dist = v.dist + 1;
+					w.path = v;
+					q.enqueue(w);
+				}
+			}
+
+		}
+	}
+	```
+
+	- <b>Note: For both BFS and Topsort, the format is the same. You use a queue, keep checking if it's empty after enqueue-ing the root. You iterate through the adjacent values, and add them to the queue if they fulfil a condition. You also need to mark them as visited somehow</b>
+
+#### Weighted Graph (No negative values) - Dijkstra's Algorithm
+- Shortest path between the starting node, and any other node in the graph
+- Greedy Algorithm
+- O(n^2)
+- If the graph is un-weighted, just take all the weights as 1 and you can use BFS. You don't need Dijkstra's
+- <b>Dijkstra's doesn't work for negative weights. It may/may not, but you should use Bellman Ford</b>
+- The algorithm is fairly simple. As long as an unvisited node exists, find the unvisited node with the smallest distance from s. Then, go through it's neighbours, and run relaxation on each one. Mark a node as vsited as you use it. Within relaxation, set the path of the relaxed node to the previous one in order to get a path later if needed.
+- Ref <a href="https://www.youtube.com/watch?v=XB4MIexjvY0">here</a>
+
+- Priority Queue solution (for sparse graphs)
+
+	```java
+	void dijkstra(Vertex s) {
+    
+		for (Vertex v in allVertices) {
+			v.dist = INFINITY;
+			v.known = false;
+		}
+
+		/* 
+		Using a priority queue with the distance as the comparison
+		allows for us to access the element with the shortest
+		distance from the src without an extra loop
+		*/
+		pq.add(new Node(s.value,0));
+
+		while(!pq.isEmpty()) {
+
+			Vertex v = pq.remove();
+			v.known = true;
+
+			// Now, evaluate the neighbours. The PQ must be updated as the distance changes
+			List<Vertex> adjVertices = v.adj;
+
+			for(Vertex w in adjVertices) {
+				// Visit only if it's not known
+				if(!w.known && w.distance != INFINITY) {
+					int distance = getCost(v,w);
+					// Relaxation step, and set path to w as v
+					if(w.dist > v.dist + distance) {
+						w.dist = v.dist + distance;
+						w.path = v;
+					}
+					priorityQueue.add(new Node(w,v.dist+distance));
 				}
 			}
 		}
 	}
 	```
-- BFS of a Binary Tree is just a level order tree traversal
+
+- Regular Solution
 
 	```java
-	class Solution {
-	    public List<List<Integer>> levelOrder(TreeNode root) {
-		int height = getTreeHeight(root);
-		List<List<Integer>> traversal = new ArrayList<List<Integer>>();
-		List<Integer> temp = new ArrayList<Integer>();
-		for(int i = 1; i <=height; i++) {
-		    List<Integer> holdElements = new ArrayList<Integer>();
-		    temp = doLevelOrder(root, i, holdElements);
-		    traversal.add(temp);
+	// unknownExists goes through the nodes, and checks if any have v.known == false
+	// getSmallestDistanceUnknownNeighbour goes through the graph's adjacency list, and gets the unknown node with the smallest distance
+
+	void dijkstra(Vertex s) {
+	
+		for (Vertex v in allVertices) {
+			v.dist = INFINITY;
+			v.known = false;
 		}
-		return traversal;
-	    }
-	    private List<Integer> doLevelOrder(TreeNode root, int level, List<Integer> myTrav) {
-		if(root == null) {
-		    // This doesn't do much, just serves as an exit
-		    return null;
+
+		s.dist = 0;
+
+		while(unknownExists(s)) {
+			// Get the one with the smallest distance - Greedy
+			Vertex v = getSmallestDistanceUnknown(s);
+			v.known = true;
+
+			List<Vertex> adjVertices = v.adj;
+
+			for(Vertex w in adjVertices) {
+				// Visit only if it's not known
+				if(!w.known) {
+					int distance = getCost(v,w);
+					// Relaxation step, and set path to w as v
+					if(w.dist > v.dist + distance) {
+						w.dist = v.dist + distance;
+						w.path = v;
+					}
+				}
+			}
 		}
-		if(level == 1) {
-		    // You could either add, or ditch the list and just print here. In that case, you wouldn't return
-		    myTrav.add(root.val);
-		}
-		doLevelOrder(root.left, level-1, myTrav);
-		doLevelOrder(root.right, level-1, myTrav);
-		// At this point, the level order has been completed.
-		return myTrav;
-	    }
-	    private int getTreeHeight(TreeNode root) {
-		if(root == null) {
-		    return 0;
-		}
-		return Math.max(getTreeHeight(root.left), getTreeHeight(root.right)) + 1;
-	    }
 	}
 	```
+
+#### Weighted Graph (Negative values) - Bellman Ford
+- Meant to fix Dijkstra's biggest drawback: negative edges
+- Uses Dynamic Programming, relax all edges |V| - 1 times
+- You cover all possible paths
+Algorithm:
+- Prepare a list of all possible edges
+- Mark the distance of all the possible edges from the source as infinity
+- Then, start relaxing the edges. Repeat this process |V|-1 times
+- O(VE) 
+	- O(n^2) -> If it's nxn
+	- O(n^3) -> For a complete graph
+- Bellman Ford fails for graphs with negative weight cycles
+	- How do you detect? After |V|-1 relaxations, relax one more time. If there's another change, then there's a negative edge cycle
+
+	```java
+	void dijkstra(Vertex s) throws NegativeCycleException {
+		for (Vertex v in allVertices) {
+			v.dist = INFINITY;
+			v.known = false;
+		}
+
+		s.dist = 0;
+
+		while(unknownExists(s)) {
+			// Get the one with the smallest distance - Greedy
+			Vertex v = getSmallestDistanceUnknown(s);
+			v.known = true;
+
+			// Run it v-1 times
+			for(int i = 1; i < VERT_COUNT; i++) {
+				for(Edge e : getEdges()) {
+					Node u = e.source;
+					Node v = e.target;
+					// Check, and set prev as well
+					relax(u,v);
+				}
+			}
+
+			// This is to check for the presence of negative edge cycles
+			for(Edge e : getEdges()) {
+				Node u = e.source;
+				Node v = e.target;
+				if(checkForRelax(u,v)) {
+					throw new NegativeCycleException();
+				}
+			}
+			// At this point, we should have it implemented. 
+		}
+	}
+	```
+
 
 #### Depth First Search
 - Allows you to visit nodes and edges of a graph
@@ -366,19 +593,31 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	n = (nodes)
 	g = [adjacency list]
 	v = [false, false, false,...] # Visited
+
 	function dfs(at):
-		if visited[at]:
+		ivf visited[at]:
 			# If already visited, then just return
 			return
+		# Do whatever you want to do here
 		visited[at] = True
 		# Get the neighbours, and go thorugh each one
 		neighbours = g[at]
 		for node in neighbours:
 			# DFS each neighbour node
 			dfs(node)
+
 	start = 0
 	dfs(0)
 	```
+
+#### Comparing DFS vs BFS
+
+| DFS | BFS |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| In DFS, we might traverse through more edges to reach a destination vertex from a source. | BFS can be used to find the single source shortest path in an unweighted graph.  We reach a vertex with minimum number of edges from a source vertex. |
+| DFS is more suitable when there are solutions away from source. | BFS is more suitable for searching verteces which are closer to the given source. |
+| DFS is more suitable for game or puzzle problems. We make a decision, then explore all paths through this decision. And if this decision leads to win situation, we stop. | BFS considers all neighbors first and therefore not suitable for decision making trees used in games or puzzles. |
+
 - Finding connected components:
 	- Counting multiple disjoint componenets. Start dfs at [0,n] and find the number of connected elements. This helps you find multiple connected componenets
 	
@@ -443,81 +682,11 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 
 - Some other uses: Minimum spanning tree, check for bipartite, check for strongly connected components, topological sorting, generate mazes.
 
-### Topological Sort
-- Graph has to be directed, acyclic.
-- Since it's a modified DFS, O(V+E)
-- Used to get an ordering of the vertices
-- Used to get a list of courses to take, in order to comply with a graph of CS pre-reqs
-- Ref <a href="https://www.youtube.com/watch?v=Q9PIxaNGnig">here</a>
-
-	```python
-	def topSortUtil(v, visited, stack):
-		visited[v] = True
-		for i in graph[v]:
-			# Don't revisit nodes - check if they've been visited
-			if !visited[i]:
-				topSortUtil(v, visited, stack)
-		stack.insert(0,v)
-		
-	def topSort():
-		visited = [False] * vertex
-		stack = []
-		# Go through each vertex - if it's unvisited, run the topsort util on it
-		for i in range(vertex):
-			if !visited[i]:
-				self.topSortUtil(i,visited,stack)
-		printStack(stack) # This is the topsorted list of nodes
-	```
-
-### Dijkstra's Algorithm
-- Ref <a href="https://www.youtube.com/watch?v=XB4MIexjvY0&t=233s">here</a>
-- Shortest path between the starting node, and any other node in the graph
-- Greedy Algorithm
-- If the graph is un-weighted, just take all the weights as 1
-- <b>Dijkstra's doesn't work for negative weights</b>
-
-	```python
-	def dijkstra(self, source, dest):
-		# Mark all nodes unvisited and store them.
-		# Set the distance to zero for our initial node and to infinity for other nodes.
-		distances = {vertex: inf for vertex in self.vertices}
-		previous_vertices = {
-		    vertex: None for vertex in self.vertices
-		}
-		distances[source] = 0
-		vertices = self.vertices.copy()
-		while vertices:
-		    # Select the unvisited node with the smallest distance, it's current node now.
-		    current_vertex = min(vertices, key=lambda vertex: distances[vertex])
-		    # Stop, if the smallest distance among the unvisited nodes is infinity.
-		    if distances[current_vertex] == inf:
-			break
-		    # Find unvisited neighbors for the current node and calculate their distances through the current node.
-		    for neighbour, cost in self.neighbours[current_vertex]:
-			alternative_route = distances[current_vertex] + cost
-			# Compare the newly calculated distance to the assigned and save the smaller one.
-			if alternative_route < distances[neighbour]:
-			    distances[neighbour] = alternative_route
-			    previous_vertices[neighbour] = current_vertex
-		    # Mark the current node as visited and remove it from the unvisited set.
-		    vertices.remove(current_vertex)
-		path, current_vertex = deque(), dest
-		while previous_vertices[current_vertex] is not None:
-		    path.appendleft(current_vertex)
-		    current_vertex = previous_vertices[current_vertex]
-		if path:
-		    path.appendleft(current_vertex)
-		return path
-	```
-- For a graph of N verticles and E edges, you can form => (E choose (N-1)) - number of cycles
-- <b>You can't find spanning trees for non-connected components </b>
-- <a href="https://www.youtube.com/watch?v=4ZlRH0eK-qQ">Ref for Prim's and Kruskal's</a>
-
 ### Prim's Algorithm
+- <a href="https://www.youtube.com/watch?v=4ZlRH0eK-qQ">Ref for Prim's and Kruskal's</a>
 - Used to find the minimum spanning tree from a graph
 - Algorithm:
-	- Always the minimum edge that's connected to the starting element
-	- Typical greedy algorithm
+	- Always the minimum edge that's connected to the starting elementB
 
 ### Kruskal's Algorithm
 - Always select the minimum cost edge, they don't have to be connected to each other
@@ -530,9 +699,6 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- You esseentially run two BFS-es, one from each node.
 	- When their searches collide, we've found a path
 - Reduces the amount of exploration needed. Ref <a href="https://www.geeksforgeeks.org/bidirectional-search/">here</a>
-
-### AVL Trees
-- Trees that automatically do rotations to become BST's - used to combat the issues faced by using BSTs.
 
 # Topic 2: Sorting Algorithms
 
