@@ -704,7 +704,7 @@ Algorithm:
 
 A list of useful sorting algorithms
 
-## Selection Sort ([GIF](assets/Selection-Sort.gif))
+## Selection Sort
 
 - Selection sort finds the minimum element in the unsorted part of the array and swaps it with the first element in the unsorted part of the array.
 - The sorted part of the array grows from left to right with every iteration.
@@ -734,7 +734,7 @@ void selectionSort(int[] arr) {
 - **Average Case:** `O(n^2)`
 - **Worst Case:** `O(n^2)`
 
-## Bubble Sort ([GIF](assets/Bubble-Sort.gif))
+## Bubble Sort
 
 - In every iteration, bubble sort compares every couplet, moving the larger element to the right as it iterates through the array.
 - The sorted part of the array grows from right to left with every iteration.
@@ -767,7 +767,7 @@ void bubbleSort(int[] arr) {
 - **Average Case:** `O(n^2)`
 - **Worst Case:** `O(n^2)`
 
-## Insertion Sort ([GIF](assets/Insertion-Sort.gif))
+## Insertion Sort
 
 - In every iteration, insertion sort takes the first element in the unsorted part of the array, finds the location it belongs to within the sorted part of the array and inserts it there.
 - The sorted part of the array grows from left to right with every iteration.
@@ -796,7 +796,7 @@ void insertionSort(int[] arr) {
 - **Average Case:** `O(n^2)`
 - **Worst Case:** `O(n^2)`
 
-## Merge Sort ([GIF](assets/Merge-Sort.png))
+## Merge Sort
 
 - Uses the *divide & conquer* approach.
 - Merge sort divides the original array into smaller arrays recursively until the resulting subarrays have one element each.
@@ -861,7 +861,7 @@ void merge(int[] arr, int[] helper, int low, int mid, int high) {
 - **Average Case:** `O(n log n)`
 - **Worst Case:** `O(n log n)`
 
-## Quicksort ([GIF](assets/Quicksort.gif))
+## Quicksort
 
 - Quicksort starts by selecting one element as the *pivot*. The array is then divided into two subarrays with all the elements smaller than the pivot on the left side of the pivot and all the elements greater than the pivot on the right side.
 - It recursively repeats this process on the left side until it is comparing only two elements at which point the left side is sorted.
@@ -932,7 +932,7 @@ void quicksort(int[] arr, int low, int high) {
 - **Average Case:** `O(n)` 
 - **Worst Case:** `O(n)`
 
-## Heap Sort ([GIF](assets/Heap-Sort.gif))
+## Heap Sort
 
 - Heap sort takes the maximum element in the array and places it at the end of the array.
 - At every iteration, the maximum element from the unsorted part of the array is selected by taking advantage of the binary heap data structure and placed at the end. Then, the unsorted part is heapified and the process is repeated.
