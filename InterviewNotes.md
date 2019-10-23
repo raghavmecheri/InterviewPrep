@@ -353,55 +353,30 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Ref <a href="https://www.youtube.com/watch?v=Q9PIxaNGnig">here</a>
 
 	```java
-	void search(Node root) throws CycleFoundException {
-		Queue q = new Queue();
-		root.visited = true;
-		q.enqueue(root);
-		int counter = 0;
+	private void topSort(HashMap<Integer, List<Integer>> graph, HashMap<Integer, Integer> inDegrees) throws  CycleFoundException {
+		// You could use just a visited marker, but that won't pick up the cycle. This will
+		int ctr = 0;        
+		Queue<Integer> q = new LinkedList<Integer>();
+		for(int x : graph.keySet()) {
+			if(inDegrees.get(x) == null) {
+				System.out.println("Starting with: "+x);
+				q.add(x);
+			}
+		}
+		
 		while(!q.isEmpty()) {
-			Node x = q.dequeue();
-			// Here is where you act on the node. You either visit, or you just order
-			x.topologicalNumber = ++counter;
-			// visit(x);
-			for(Node r in x.adjacent) {
-				if(r.visited == false) {
-					r.visited == true;
-					queue.enqueue(r);
+			int source = q.poll();
+			// You can replace ctr with an Arraylist of the values, if you want to print them
+			ctr++;
+			for(int x : graph.get(source)) {
+				inDegrees.put(x, inDegrees.get(x)-1);
+				if(inDegrees.get(x) == 0) {
+					q.add(x);
 				}
 			}
 		}
-		if(counter != NUM_VERTICIES) {
+		if(ctr != graph.keySet().size()) {
 			throw new CycleFoundException();
-		}
-	}
-	```
-
-	```java
-	void topsort() throws CycleFoundException {
-		Queue<Vertex>q = new Queue<Vertex>();
-		int counter = 0;
-
-		for each vertex {
-			if (vertex.indegree == 0) {
-				// Every vertex with an indegree of 0 goes into the queue
-				q.enqueue(v);
-			}
-
-			while(!q.isEmpty()) {
-				Vertex v = q.dequeue();
-				// Top num represents its topological ordering
-				v.topNum = ++counter;
-
-				for(Vertex w in v.adjacencyList) {
-					if(--w.indegree == 0) {
-						q.enqueue(w);
-					}
-				}
-			}
-
-			if(counter != NUM_VERTICES) {
-				throw new CycleFoundException();
-			}
 		}
 	}
 	```
