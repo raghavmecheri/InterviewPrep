@@ -650,9 +650,40 @@ Algorithm:
 	- Push the original vertex to the Stack, and start exploring the vertex you just navigated to
 	- Carry this on, suspending vertices and adding them to the Stack. When you don't have any edges on a vertex, <b>revert</b> to an earlier vertex by popping the stack
 
-##### Common uses
+##### Problems uses
 
-- Using DFS to find cycles:
+- Deepclone a graph (using BFS):
+
+	```java
+	public Node cloneGraph(Node node) {
+        HashMap<Node,Node> visited = new HashMap<Node,Node>();
+        Queue<Node> q = new LinkedList<Node>();
+        
+        visited.put(node, new Node(node.val, new ArrayList()));
+        q.add(node);
+        
+        while(!q.isEmpty()) {
+            Node src = q.poll();
+            Node target = visited.get(src);
+            
+            if(src.neighbors != null) {
+                List<Node> nn = src.neighbors;
+                for(Node x : nn) {
+                    Node subTarget = visited.get(x);
+                    if(subTarget == null) {
+                        subTarget = new Node(x.val, new ArrayList());
+                        visited.put(x, subTarget);
+                        q.add(x);
+                    }
+                    target.neighbors.add(subTarget);
+                }
+            }
+        }
+        return visited.get(node);
+    }
+	```
+
+- Using DFS to find cycles (Can also use TopSort):
 
 	```python
 	def isCyclicUtil(v, visited, recStack): 
