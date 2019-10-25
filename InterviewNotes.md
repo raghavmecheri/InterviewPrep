@@ -210,12 +210,25 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Each child node has 0 or more child nodes, and so on.
 - Trees <b>cannot</b> contain cycles
 - <b>Worst and last case complexities vary</b>
+- <b>Height and Depth</b>"
+	- The depth of a node is the number of edges from the node to the tree's root node. A root node will have a depth of 0.
+	- The height of a node is the number of edges on the longest path from the node to a leaf. A leaf node will have a height of 0.
+- A regular tree has a firstChild object, which generally contains a single child. It also contains a nextSibling LinkedList, with the other siblings
 
 - A binary tree is one where each child has upto only <b>two</b> children
 - A binary search tree is one where:
 	- The left subtree has nodes with values less than the root
 	- The right subtree has nodes with values greater than the root
 	- The right and left subtree must also satisfy the same axioms
+
+	```java	
+	BinaryNode() {
+		int data;
+		BinaryNode left;
+		BinaryNode right;
+	}
+	```
+
 - A <b>complete</b> Binary Tree is one where every level is fully filled, except the last one
 - A <b>full</b> Binary Tree is one where every node has either zero or two children
 - A <b>perfect</b> binary tree is one that's both full, and complete. All the nodes are at the same level, and this last level has the maximum number of nodes.
@@ -251,6 +264,150 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	}
 	```
 
+#### Expression Trees
+
+- Expression trees are those where the root nodes are operators, and the leaves are the operands
+	- They can be evaluated using in-order traversal
+	- Prefix Expression: Pre order
+	- Postfix Expression: Post order
+
+- Constructing an expression tree from a postfix expression:
+	- As you read operators, make them into their own trees and push them onto the stack
+	- When you encounter an operand, pop twice, first pop -> right, second pop -> left, operand -> root. Then, push this newly constructed tree onto the stack again
+	- Continue this process until either the stack is empty, and the expression has been traversed.
+		- If either the Stack has nothing when it needs to have something, or if it's not empty at the end of the expression, then the expression is invalid
+
+#### Binary Search Trees
+- For every node, the values of the nodes on the left sub-tree are smaller than their root, and the values of the nodes on the right sub-tree are larger than their root
+- Note: Most of these functions return the <b>new root of the sub-tree</b>
+- Time taken is dependant on the height: logn to n
+- For a BST, checking if an element exists is O(logn) as it's <b>divide and conquer</b> like binary search is
+
+	```java
+	boolean contains(root, int x) {
+		if (root == null) {
+			return false;
+		}
+		if(root.value.compareTo(x) > 0) {
+			return contains(root.left, x);
+		} else if(root.value.compareTo(x) < 0) {
+			return contains(root.right, x);
+		} else {
+			return true;
+		}
+	}
+	```
+
+- findMin() traverse the tree to the furtherest left element
+- findMax() traverse the tree to the furtherest right element
+
+	```java
+	int findMin(BinaryNode root) {
+		if(root == null) {
+			return null;
+		}
+		if(root.left == null) {
+			return root.value;
+		}
+		return findMin(root.left);
+	}
+	```
+
+- To insert into a BST:
+
+	```java
+	BinaryNode insert(int data, BinaryNode root) {
+		if (root == null) {
+			root.data = data;
+		}
+		if(root.data.compareTo(data) > 0) {
+			insert(root.left, data);
+		} else if(root.data.compareTo(data) < 0) {
+			insert(root.right, data);
+		} else {
+			System.out.println("Element already exists");
+		}
+		return root;
+	}
+	```
+
+- Deleting from a BST is tricky: if you remove an element, you may/may not have to change all the other links and nodes, in order to ensure that the result conforms to the BST definition
+
+	```java
+	private BinaryNode removeNode(int x, BinaryNode root) {
+		if(t == null) {
+			return t;
+		}
+		if(root.value.compareTo(x) > 0) {
+			return contains(root.left, x);
+		} else if(root.value.compareTo(x) < 0) {
+			return contains(root.right, x);
+		} else {
+			if(root.left != null && root.right != null) {
+				// Here, you find the smallest value on the right, and move that to the root
+				// Once that's done, just remove the value that was moved to the root
+				int replace = minMin(root.right).value;
+				root.value = replace;
+				t.right = removeNode(root.right, replace);
+
+			} else {
+				root = (root.left != null) ? root.left : root.right;
+			}
+			// We're at the node we need to remove
+
+		}
+	}
+	```
+
+- Average case for a BST is O(logn), but the worst case is when you add a list of ascending/descending values. In this case, the BST becomes a LinkedList, and is fairly useless. In order to combat this, you need a <b>self adjusting (AVL) tree</b>
+
+#### AVL Trees
+- Eliminate the issue with Binary Trees, which can turn them into O(N) LinkedLists
+- Is self adjusting, uses rotations to ensure that it always fulfils a few conditions, which ensure that it's always O(logn)
+- Works based on <b>rotations</b>, which basically involve pulling the position of the nodes in order to convert a BST of larger height into one of a lower height
+- <b>Balance Factor:</h> h(left subtree) - h(right subtree) = -1, 0, 1 => if this condition is fulfilled, then the node is balanced.
+	- |bf| = |hl -  hr| <= 1
+- Four types of rotations:
+	- Single rotation to the right (LL Imbalance) [LL Rotation]
+	- Single rotation to the right to reallign the middle node, followed by a consequent one to the left (RL Imbalance) [RL Rotation]
+	- Single rotation to the left (RR Imbalance) [RR Rotation]
+	- Single rotation to the left to reallign the middle node, followed by a consequent one to the right (LR Imbalance) [LR Rotation]
+- The first two are when hl > hr, and the second two are when hr > hl
+- When you're looking at a larger tree, look only at the 3 nodes which matter. Rotate them, rememebr whose subtree one was on. Find the gap, and then add it to that gap.
+
+##### Implementing an AVL Tree
+- Insert is the same as for a BST. Insert wherever it fits based on the compareTo(), and then call balance(root)
+- Balance is the function that runs rotations, in order for the tree to keep its structure.
+
+	```java
+	private AVLNode banace(AVLNode root) {
+		if(root == null) {
+			return root;
+		}
+
+		if(height(t.left)-height(t.right) > 1) {
+			if(height(t.left.left) >= height(t.left.right)) {
+				// LL imbalance
+				t = rotateWithLeftChild(t);
+			} else {
+				// RL = So you do RL
+				t = doubleOnLeftChild(t);
+			}
+		} else if(height(t.right)-height(t.left) > 1) {
+			if(height(t.right.right) >= height(t.right.left)) {
+				// RR imbalance
+				t = rotateWithRightChild(t);
+			} else {
+				// LR = So you do LR
+				t = doubleOnRightChild(t);
+			}
+		}
+
+		return t;
+	}
+	```
+
+#### Level order traversal
 - Level order tree traversal of a binary tree
 
 	```java
@@ -291,9 +448,65 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 
 ### Heaps
 
-- A min/max heap is a complete binary tree, where each node has a value that is smaller (in the case of a min heap) or larger (in the case of a max heap) than it's children. Hence, the root is the <b>minimum (MinHeap) or maximum (MaxHeap) element in a tree</b>
+- A min/max heap is a <b>complete</b> binary tree, where each node has a value that is smaller (in the case of a min heap) or larger (in the case of a max heap) than it's children.
+- <b>Heap Order Property:</b> The root is the <b>minimum (MinHeap) or maximum (MaxHeap) element in a tree</b>
 - When you insert into a MinHeap, you insert the element into the bottom. You then percolate the element up until it reaches a point where it satisfies the condition of the MinHeap. The process is the same for a MaxHeap too. This process takes O(logn) time.
 - When you extract an element, you remove the root and replace it with the most extreme case (bottom right) - then, you percolate down. As you pick between left and right, you pick the smaller one to maintain min-heap properties.
+
+
+#### Insert (Percolate Up)
+- You insert an element at the position that you percolate to
+
+	```java
+	void insert(int x) {
+		if(currentSize == array.length - 1) {
+			enlargeArray(array.length*2 -1);
+		}
+		// Percolate up until you reach the correct position - you keep moving the nodes/elements down
+		int hole = ++currentSize;
+		// array[0] is always a placeholder
+		for(array[0] = x; x < array[hole/2]; hole/=2) {
+			array[hole] = array[hole/2];
+		}
+		array[hole] = x;
+	}
+	```
+
+#### Delete (Percolate Down)
+- You delete the root for either case. The root is the biggest element in a MaxHeap, and the smallest element in a MinHeap
+- The root is replaced by the smaller of the two children for MinHeap, and the larger of the two children for MaxHeap
+
+	```java
+	int deleteMin() {
+		if(isEmpty()) {
+			throw new UnderflowException();
+		}
+
+		int min = findMin()
+		// You take the smallest/largest element and dump it into the root.
+		// Then, you percolate the same down
+		array[1] = array[currentSize--];
+		percolateDown(1);
+	}
+
+	void percolateDown(int hole) {
+		// This is for a minheap
+		int child;
+		int t = array[hole];
+		while(hole <= (currentSize/2)) {
+			child = hole*2;
+			if(child != currentSize && array[child+1] < array[child]) {
+				child++;
+			}
+			if(array[child] < t) {
+				array[hole] = array[child];
+			} else {
+				break;
+			}
+		}
+		array[hole] = temp;
+	}
+	```
 
 ### Tries (Prefix Trees)
 
@@ -712,6 +925,7 @@ Algorithm:
 - Divide and conquer
 - Splits the array based on the middle value, and keeps searching
 - Works for sorted arrays
+
 	```python
 	def binarySearch(arr, x):
 		l = 0
