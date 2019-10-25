@@ -113,8 +113,8 @@ SOPln(s.toString());
 	}
 	
 	Class Node {
-	int data;
-	Node next = null;
+		int data;
+		Node next = null;
 		public Node(int d);
 		void appendToTail(int d){
 			Node x = new Node(d); 
