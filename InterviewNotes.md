@@ -508,6 +508,10 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	}
 	```
 
+### Priority Queue
+- A Priority Queue is an abstract datatype, which can be implemented extremly well using a Min/Max Heap.
+- A PQ is similar to a heap, in the sense that the underlying datatype <b>could</b> be a heap, but it could also possibly be something else
+
 ### Tries (Prefix Trees)
 
 - A tree of LinkedLists, it's a variant of an n-arraytree that stores combinations
@@ -519,7 +523,6 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Trees that automatically do rotations to become BST's - used to combat the issues faced by using BSTs.
 
 ### Graphs
-
 - Tree is a type of graph, but not all graphs are trees. Trees are connected graphs without cycles.
 - A graph is simply a collection of nodes, with edges between (not necessarily all of) them. 
 - Graph edges can be either directed, or undirected. It can have multiple sub-graphs, or not. If every vertex has a path between it, it's a directed graph.
