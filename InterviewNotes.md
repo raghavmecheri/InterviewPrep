@@ -365,7 +365,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Eliminate the issue with Binary Trees, which can turn them into O(N) LinkedLists
 - Is self adjusting, uses rotations to ensure that it always fulfils a few conditions, which ensure that it's always O(logn)
 - Works based on <b>rotations</b>, which basically involve pulling the position of the nodes in order to convert a BST of larger height into one of a lower height
-- <b>Balance Factor:</h> h(left subtree) - h(right subtree) = -1, 0, 1 => if this condition is fulfilled, then the node is balanced.
+- <b>Balance Factor:</b> h(left subtree) - h(right subtree) = -1, 0, 1 => if this condition is fulfilled, then the node is balanced.
 	- |bf| = |hl -  hr| <= 1
 - Four types of rotations:
 	- Single rotation to the right (LL Imbalance) [LL Rotation]
@@ -380,7 +380,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Balance is the function that runs rotations, in order for the tree to keep its structure.
 
 	```java
-	private AVLNode banace(AVLNode root) {
+	private AVLNode balance(AVLNode root) {
 		if(root == null) {
 			return root;
 		}
