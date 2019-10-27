@@ -93,6 +93,32 @@ SOPln(s.toString());
 - Rotate Matrix:
 	- Essentially each column becomes a row. C1 = R'1, C2 = R'2, etc.
 	- To do this in place, write a swap function for the above assignments and call it repeatedly
+- Generate all permutations of an array:
+
+	```java
+	private void permute(String str, int l, int r) { 
+	    if (l == r) 
+	        System.out.println(str); 
+	    else
+	    { 
+	        for (int i = l; i <= r; i++) 
+	        { 
+	            str = swap(str,l,i); 
+	            permute(str, l+1, r); 
+	            str = swap(str,l,i); 
+	        } 
+	    } 
+	} 
+	 
+	public String swap(String a, int i, int j) { 
+	    char temp; 
+	    char[] charArray = a.toCharArray(); 
+	    temp = charArray[i] ; 
+	    charArray[i] = charArray[j]; 
+	    charArray[j] = temp; 
+	    return String.valueOf(charArray); 
+	}
+	```	
 
 ## Linked Lists
 
@@ -155,6 +181,7 @@ SOPln(s.toString());
 
 - Stacks do <b>not</b> have constant-time access to the i'th item
 - Stacks <b>do</b> have constant-time add and remove ability
+- Usually used to store items to <b>reverse</b> order
 
 Easiest Implementatin: Array/ArrayList -> hold item with index of last item. Use this to pop/peek/append. Remove elements when required.
 
@@ -168,6 +195,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	peek() -> Returns the top of the queue, but doesn't remove
 	isEmpty() -> Returns true iff the queue is empty
 
+- Usually used to store items to preserve order
 - Queues can be <b>directly</b> implemented using LinkedLists.
 
 ### Common Questions
