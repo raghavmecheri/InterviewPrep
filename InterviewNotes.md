@@ -220,11 +220,11 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	public static Stack<Integer> sortstack(Stack<Integer> input) { 
     	Stack<Integer> tmpStack = new Stack<Integer>(); 
     	while(!input.isEmpty()) { 
-        	int tmp = input.pop(); 
-        	while(!tmpStack.isEmpty() && tmpStack.peek() > tmp) { 
-        		input.push(tmpStack.pop()); 
-       		} 
-        tmpStack.push(tmp); 
+			int tmp = input.pop(); 
+			while(!tmpStack.isEmpty() && tmpStack.peek() > tmp) { 
+				input.push(tmpStack.pop()); 
+			} 
+			tmpStack.push(tmp); 
     	} 
     	return tmpStack; 
     }
@@ -238,7 +238,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Each child node has 0 or more child nodes, and so on.
 - Trees <b>cannot</b> contain cycles
 - <b>Worst and last case complexities vary</b>
-- <b>Height and Depth</b>"
+- <b>Height and Depth</b>
 	- The depth of a node is the number of edges from the node to the tree's root node. A root node will have a depth of 0.
 	- The height of a node is the number of edges on the longest path from the node to a leaf. A leaf node will have a height of 0.
 - A regular tree has a firstChild object, which generally contains a single child. It also contains a nextSibling LinkedList, with the other siblings
@@ -300,8 +300,8 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- Postfix Expression: Post order
 
 - Constructing an expression tree from a postfix expression:
-	- As you read operators, make them into their own trees and push them onto the stack
-	- When you encounter an operand, pop twice, first pop -> right, second pop -> left, operand -> root. Then, push this newly constructed tree onto the stack again
+	- As you read operands, make them into their own trees and push them onto the stack
+	- When you encounter an operator, pop twice, first pop -> right, second pop -> left, operator -> root. Then, push this newly constructed tree onto the stack again
 	- Continue this process until either the stack is empty, and the expression has been traversed.
 		- If either the Stack has nothing when it needs to have something, or if it's not empty at the end of the expression, then the expression is invalid
 
@@ -362,7 +362,7 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Deleting from a BST is tricky: if you remove an element, you may/may not have to change all the other links and nodes, in order to ensure that the result conforms to the BST definition
 
 	```java
-	private BinaryNode removeNode(int x, BinaryNode root) {
+	private BinaryNode removeNode(BinaryNode root, int x) {
 		if(t == null) {
 			return t;
 		}
