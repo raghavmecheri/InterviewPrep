@@ -780,7 +780,7 @@ Algorithm:
 
 			// Run it v-1 times
 			for(int i = 1; i < VERT_COUNT; i++) {
-				for(Edge e : getEdges()) {
+				for(Edge e : getEdges(v)) {
 					Node u = e.source;
 					Node v = e.target;
 					// Check, and set prev as well
@@ -1170,39 +1170,36 @@ void merge(int[] arr, int[] helper, int low, int mid, int high) {
 ### Algorithm
 
 ```java
-void startQuicksort(int[] arr) {
-    quicksort(arr, 0, arr.length - 1);
+public void quicksort(int[] arr, l, h) {
+	if(l < h) {
+		int parPoint = partition(arr,l,h);
+		quicksort(arr, l, parPoint);
+		quicksort(arr, parPoint+1, h);
+	}
 }
 
-void quicksort(int[] arr, int low, int high) {
-    if (low >= high) return;
+private void partition(int[] arr, int low, int length) {
+	// You us use the middle element as the pivot
+	int pivot = arr[low+(length)/2];
+	int i = low;
+	int j = length-1;
 
-    int mid = low + ((high - low) / 2);
-    int pivot = arr[mid];  // pick pivot point
+	while(i < j) {
+		while(pivot >= arr[i]) {
+			i++;
+		}
 
-    int i = low, j = high;
-    while (i <= j) {
-        // Find element on left that should be on right.
-        while (arr[i] < pivot) i++;
+		while(arr[j] > pivot) {
+			j--;
+		}
 
-        // Find element on right that should be on left.
-        while (arr[j] > pivot) j--;
+		if(i < j) {
+			swap(arr, i, j);
+		}
+	}
 
-        // Swap elements and move left and right indices.
-        if (i <= j) {
-            swap(arr, i, j);
-            i++;
-            j--;
-        }
-    }
-
-    // Sort left half.
-    if (low < i - 1)
-        quicksort(arr, low, i - 1);
-
-    // Sort right half.
-    if (i < high)
-        quicksort(arr, i, high);
+	swap(arr, pivot, j);
+	return j;
 }
 ```
 
