@@ -95,30 +95,30 @@ SOPln(s.toString());
 	- To do this in place, write a swap function for the above assignments and call it repeatedly
 - Generate all permutations of an array:
 
-	```java
-	private void permute(String str, int l, int r) { 
-	    if (l == r) 
-	        System.out.println(str); 
-	    else
-	    { 
-	        for (int i = l; i <= r; i++) 
-	        { 
-	            str = swap(str,l,i); 
-	            permute(str, l+1, r); 
-	            str = swap(str,l,i); 
-	        } 
-	    } 
-	} 
-	 
-	public String swap(String a, int i, int j) { 
-	    char temp; 
-	    char[] charArray = a.toCharArray(); 
-	    temp = charArray[i] ; 
-	    charArray[i] = charArray[j]; 
-	    charArray[j] = temp; 
-	    return String.valueOf(charArray); 
-	}
-	```	
+```java
+private void permute(String str, int l, int r) { 
+    if (l == r) 
+        System.out.println(str); 
+    else
+    { 
+        for (int i = l; i <= r; i++) 
+        { 
+            str = swap(str,l,i); 
+            permute(str, l+1, r); 
+            str = swap(str,l,i); 
+        } 
+    } 
+} 
+ 
+public String swap(String a, int i, int j) { 
+    char temp; 
+    char[] charArray = a.toCharArray(); 
+    temp = charArray[i] ; 
+    charArray[i] = charArray[j]; 
+    charArray[j] = temp; 
+    return String.valueOf(charArray); 
+}
+```	
 
 ## Linked Lists
 
@@ -129,29 +129,29 @@ SOPln(s.toString());
 - Adding: O(1)
 - LinkedLists can also be accessed recursively:
 
-	```java
-	void traverse(Node head) {
-		if(head != null) {
-			processData(head.data); // Here for forwards
-			traverse(head.next);
-			processData(head.data) // Here for backwards
-		}	
-	}
-	
-	Class Node {
-		int data;
-		Node next = null;
-		public Node(int d);
-		void appendToTail(int d){
-			Node x = new Node(d); 
-			Node n = this;
-			while(n.next != null) {
-				n = n.next;	
-			}
-			n.next = x;
+```java
+void traverse(Node head) {
+	if(head != null) {
+		processData(head.data); // Here for forwards
+		traverse(head.next);
+		processData(head.data) // Here for backwards
+	}	
+}
+
+Class Node {
+	int data;
+	Node next = null;
+	public Node(int d);
+	void appendToTail(int d){
+		Node x = new Node(d); 
+		Node n = this;
+		while(n.next != null) {
+			n = n.next;	
 		}
+		n.next = x;
 	}
-	```
+}
+```
 
 ### Common Questions
 
@@ -216,19 +216,19 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Sort Stack:
 	- Poelements out from the input stack. With the popped element, push all the temp elements into the input stacks that are bigger than the element popped from the input stack. Once this is done, push the input pop into the temp stack. Repeat this for every input element. This way, you're basically popping out elements, and recycling them until you find the right one.
 	
-	```java
-	public static Stack<Integer> sortstack(Stack<Integer> input) { 
-    	Stack<Integer> tmpStack = new Stack<Integer>(); 
-    	while(!input.isEmpty()) { 
-			int tmp = input.pop(); 
-			while(!tmpStack.isEmpty() && tmpStack.peek() > tmp) { 
-				input.push(tmpStack.pop()); 
-			} 
-			tmpStack.push(tmp); 
-    	} 
-    	return tmpStack; 
-    }
-    ```
+```java
+public static Stack<Integer> sortstack(Stack<Integer> input) { 
+	Stack<Integer> tmpStack = new Stack<Integer>(); 
+	while(!input.isEmpty()) { 
+		int tmp = input.pop(); 
+		while(!tmpStack.isEmpty() && tmpStack.peek() > tmp) { 
+			input.push(tmpStack.pop()); 
+		} 
+		tmpStack.push(tmp); 
+	} 
+	return tmpStack; 
+}
+```
 
 ## Graphs and Trees
 
@@ -249,13 +249,13 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- The right subtree has nodes with values greater than the root
 	- The right and left subtree must also satisfy the same axioms
 
-	```java	
-	BinaryNode() {
-		int data;
-		BinaryNode left;
-		BinaryNode right;
-	}
-	```
+```java	
+BinaryNode() {
+	int data;
+	BinaryNode left;
+	BinaryNode right;
+}
+```
 
 - A <b>complete</b> Binary Tree is one where every level is fully filled, except the last one
 - A <b>full</b> Binary Tree is one where every node has either zero or two children
@@ -266,31 +266,51 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- Pre Order
 	- In Order
 	
-	```java
-	void inOrder(Node node) {
-		if (node != null) {
-			inOrder(node.left);
-			print(node.value);
-			inOrder(node.right);
-		}
+```java
+void inOrder(Node node) {
+	if (node != null) {
+		inOrder(node.left);
+		print(node.value);
+		inOrder(node.right);
 	}
+}
 
-	void postOrder(Node node) {
-		if (node != null) {
-			postOrder(node.left);
-			postOrder(node.right);
-			print(node.value);
-		}
+void postOrder(Node node) {
+	if (node != null) {
+		postOrder(node.left);
+		postOrder(node.right);
+		print(node.value);
 	}
+}
 
-	void preOrder(Node node) {
-		if (node != null) {
-			print(node.value);
-			preOrder(node.left);
-			preOrder(node.right);
-		}
+void preOrder(Node node) {
+	if (node != null) {
+		print(node.value);
+		preOrder(node.left);
+		preOrder(node.right);
 	}
-	```
+}
+```
+
+- Lowest common ancestor:
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+	if(root==null) {
+		return null;
+	}
+	if(root.val==p.val||root.val==q.val) {
+		return root;
+	}
+	TreeNode left = lowestCommonAncestor(root.left, p, q);
+	TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+    if(left != null && right != null) {
+        return root;
+    }
+
+    return left == null ? right : left;
+}
+```
 
 #### Expression Trees
 
@@ -311,81 +331,81 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Time taken is dependant on the height: logn to n
 - For a BST, checking if an element exists is O(logn) as it's <b>divide and conquer</b> like binary search is
 
-	```java
-	boolean contains(root, int x) {
-		if (root == null) {
-			return false;
-		}
-		if(root.value.compareTo(x) > 0) {
-			return contains(root.left, x);
-		} else if(root.value.compareTo(x) < 0) {
-			return contains(root.right, x);
-		} else {
-			return true;
-		}
+```java
+boolean contains(root, int x) {
+	if (root == null) {
+		return false;
 	}
-	```
+	if(root.value.compareTo(x) > 0) {
+		return contains(root.left, x);
+	} else if(root.value.compareTo(x) < 0) {
+		return contains(root.right, x);
+	} else {
+		return true;
+	}
+}
+```
 
 - findMin() traverse the tree to the furtherest left element
 - findMax() traverse the tree to the furtherest right element
 
-	```java
-	int findMin(BinaryNode root) {
-		if(root == null) {
-			return null;
-		}
-		if(root.left == null) {
-			return root.value;
-		}
-		return findMin(root.left);
+```java
+int findMin(BinaryNode root) {
+	if(root == null) {
+		return null;
 	}
-	```
+	if(root.left == null) {
+		return root.value;
+	}
+	return findMin(root.left);
+}
+```
 
 - To insert into a BST:
 
-	```java
-	BinaryNode insert(int data, BinaryNode root) {
-		if (root == null) {
-			root.data = data;
-		}
-		if(root.data.compareTo(data) > 0) {
-			insert(root.left, data);
-		} else if(root.data.compareTo(data) < 0) {
-			insert(root.right, data);
-		} else {
-			System.out.println("Element already exists");
-		}
-		return root;
+```java
+BinaryNode insert(int data, BinaryNode root) {
+	if (root == null) {
+		root.data = data;
 	}
-	```
+	if(root.data.compareTo(data) > 0) {
+		insert(root.left, data);
+	} else if(root.data.compareTo(data) < 0) {
+		insert(root.right, data);
+	} else {
+		System.out.println("Element already exists");
+	}
+	return root;
+}
+```
 
 - Deleting from a BST is tricky: if you remove an element, you may/may not have to change all the other links and nodes, in order to ensure that the result conforms to the BST definition
 
-	```java
-	private BinaryNode removeNode(BinaryNode root, int x) {
-		if(t == null) {
-			return t;
-		}
-		if(root.value.compareTo(x) > 0) {
-			return contains(root.left, x);
-		} else if(root.value.compareTo(x) < 0) {
-			return contains(root.right, x);
-		} else {
-			if(root.left != null && root.right != null) {
-				// Here, you find the smallest value on the right, and move that to the root
-				// Once that's done, just remove the value that was moved to the root
-				int replace = minMin(root.right).value;
-				root.value = replace;
-				t.right = removeNode(root.right, replace);
-
-			} else {
-				root = (root.left != null) ? root.left : root.right;
-			}
-			// We're at the node we need to remove
-
-		}
+```java
+private BinaryNode removeNode(BinaryNode root, int x) {
+	if(t == null) {
+		return t;
 	}
-	```
+	if(root.value.compareTo(x) > 0) {
+		return contains(root.left, x);
+	} else if(root.value.compareTo(x) < 0) {
+		return contains(root.right, x);
+	} else {
+		if(root.left != null && root.right != null) {
+			// Here, you find the smallest value on the right, and move that to the root
+			// Once that's done, just remove the value that was moved to the root
+			int replace = minMin(root.right).value;
+			root.value = replace;
+			t.right = removeNode(root.right, replace);
+
+		} else {
+			root = (root.left != null) ? root.left : root.right;
+		}
+		// We're at the node we need to remove
+
+	}
+}
+```
 
 - Average case for a BST is O(logn), but the worst case is when you add a list of ascending/descending values. In this case, the BST becomes a LinkedList, and is fairly useless. In order to combat this, you need a <b>self adjusting (AVL) tree</b>
 
@@ -407,72 +427,72 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Insert is the same as for a BST. Insert wherever it fits based on the compareTo(), and then call balance(root)
 - Balance is the function that runs rotations, in order for the tree to keep its structure.
 
-	```java
-	private AVLNode balance(AVLNode root) {
-		if(root == null) {
-			return root;
-		}
-
-		if(height(t.left)-height(t.right) > 1) {
-			if(height(t.left.left) >= height(t.left.right)) {
-				// LL imbalance
-				t = rotateWithLeftChild(t);
-			} else {
-				// RL = So you do RL
-				t = doubleOnLeftChild(t);
-			}
-		} else if(height(t.right)-height(t.left) > 1) {
-			if(height(t.right.right) >= height(t.right.left)) {
-				// RR imbalance
-				t = rotateWithRightChild(t);
-			} else {
-				// LR = So you do LR
-				t = doubleOnRightChild(t);
-			}
-		}
-
-		return t;
+```java
+private AVLNode balance(AVLNode root) {
+	if(root == null) {
+		return root;
 	}
-	```
+
+	if(height(t.left)-height(t.right) > 1) {
+		if(height(t.left.left) >= height(t.left.right)) {
+			// LL imbalance
+			t = rotateWithLeftChild(t);
+		} else {
+			// RL = So you do RL
+			t = doubleOnLeftChild(t);
+		}
+	} else if(height(t.right)-height(t.left) > 1) {
+		if(height(t.right.right) >= height(t.right.left)) {
+			// RR imbalance
+			t = rotateWithRightChild(t);
+		} else {
+			// LR = So you do LR
+			t = doubleOnRightChild(t);
+		}
+	}
+
+	return t;
+}
+```
 
 #### Level order traversal
 - Level order tree traversal of a binary tree
 
-	```java
-	class Solution {
-	    public List<List<Integer>> levelOrder(TreeNode root) {
-			int height = getTreeHeight(root);
-			List<List<Integer>> traversal = new ArrayList<List<Integer>>();
-			List<Integer> temp = new ArrayList<Integer>();
-			for(int i = 1; i <=height; i++) {
-				List<Integer> holdElements = new ArrayList<Integer>();
-				temp = doLevelOrder(root, i, holdElements);
-				traversal.add(temp);
-			}
-			return traversal;
-	    }
-	    private List<Integer> doLevelOrder(TreeNode root, int level, List<Integer> myTrav) {
-			if(root == null) {
-				// This doesn't do much, just serves as an exit
-				return null;
-			}
-			if(level == 1) {
-				// You could either add, or ditch the list and just print here. In that case, you wouldn't return
-				myTrav.add(root.val);
-			}
-			doLevelOrder(root.left, level-1, myTrav);
-			doLevelOrder(root.right, level-1, myTrav);
-			// At this point, the level order has been completed.
-			return myTrav;
-	    }
-	    private int getTreeHeight(TreeNode root) {
-			if(root == null) {
-				return 0;
-			}
-			return Math.max(getTreeHeight(root.left), getTreeHeight(root.right)) + 1;
-	    }
-	}
-	```
+```java
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+		int height = getTreeHeight(root);
+		List<List<Integer>> traversal = new ArrayList<List<Integer>>();
+		List<Integer> temp = new ArrayList<Integer>();
+		for(int i = 1; i <=height; i++) {
+			List<Integer> holdElements = new ArrayList<Integer>();
+			temp = doLevelOrder(root, i, holdElements);
+			traversal.add(temp);
+		}
+		return traversal;
+    }
+    private List<Integer> doLevelOrder(TreeNode root, int level, List<Integer> myTrav) {
+		if(root == null) {
+			// This doesn't do much, just serves as an exit
+			return null;
+		}
+		if(level == 1) {
+			// You could either add, or ditch the list and just print here. In that case, you wouldn't return
+			myTrav.add(root.val);
+		}
+		doLevelOrder(root.left, level-1, myTrav);
+		doLevelOrder(root.right, level-1, myTrav);
+		// At this point, the level order has been completed.
+		return myTrav;
+    }
+    private int getTreeHeight(TreeNode root) {
+		if(root == null) {
+			return 0;
+		}
+		return Math.max(getTreeHeight(root.left), getTreeHeight(root.right)) + 1;
+    }
+}
+```
 
 ### Heaps
 
@@ -485,56 +505,56 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 #### Insert (Percolate Up)
 - You insert an element at the position that you percolate to
 
-	```java
-	void insert(int x) {
-		if(currentSize == array.length - 1) {
-			enlargeArray(array.length*2 -1);
-		}
-		// Percolate up until you reach the correct position - you keep moving the nodes/elements down
-		int hole = ++currentSize;
-		// array[0] is always a placeholder
-		for(array[0] = x; x < array[hole/2]; hole/=2) {
-			array[hole] = array[hole/2];
-		}
-		array[hole] = x;
+```java
+void insert(int x) {
+	if(currentSize == array.length - 1) {
+		enlargeArray(array.length*2 -1);
 	}
-	```
+	// Percolate up until you reach the correct position - you keep moving the nodes/elements down
+	int hole = ++currentSize;
+	// array[0] is always a placeholder
+	for(array[0] = x; x < array[hole/2]; hole/=2) {
+		array[hole] = array[hole/2];
+	}
+	array[hole] = x;
+}
+```
 
 #### Delete (Percolate Down)
 - You delete the root for either case. The root is the biggest element in a MaxHeap, and the smallest element in a MinHeap
 - The root is replaced by the smaller of the two children for MinHeap, and the larger of the two children for MaxHeap
 
-	```java
-	int deleteMin() {
-		if(isEmpty()) {
-			throw new UnderflowException();
-		}
-
-		int min = findMin()
-		// You take the smallest/largest element and dump it into the root.
-		// Then, you percolate the same down
-		array[1] = array[currentSize--];
-		percolateDown(1);
+```java
+int deleteMin() {
+	if(isEmpty()) {
+		throw new UnderflowException();
 	}
 
-	void percolateDown(int hole) {
-		// This is for a minheap
-		int child;
-		int t = array[hole];
-		while(hole <= (currentSize/2)) {
-			child = hole*2;
-			if(child != currentSize && array[child+1] < array[child]) {
-				child++;
-			}
-			if(array[child] < t) {
-				array[hole] = array[child];
-			} else {
-				break;
-			}
+	int min = findMin()
+	// You take the smallest/largest element and dump it into the root.
+	// Then, you percolate the same down
+	array[1] = array[currentSize--];
+	percolateDown(1);
+}
+
+void percolateDown(int hole) {
+	// This is for a minheap
+	int child;
+	int t = array[hole];
+	while(hole <= (currentSize/2)) {
+		child = hole*2;
+		if(child != currentSize && array[child+1] < array[child]) {
+			child++;
 		}
-		array[hole] = temp;
+		if(array[child] < t) {
+			array[hole] = array[child];
+		} else {
+			break;
+		}
 	}
-	```
+	array[hole] = temp;
+}
+```
 
 ### Priority Queue
 - A Priority Queue is an abstract datatype, which can be implemented extremly well using a Min/Max Heap.
@@ -596,34 +616,34 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - You can either use root.visited, or use indegrees to track visited nodes
 - Ref <a href="https://www.youtube.com/watch?v=Q9PIxaNGnig">here</a>
 
-	```java
-	private void topSort(HashMap<Integer, List<Integer>> graph, HashMap<Integer, Integer> inDegrees) throws  CycleFoundException {
-		// You could use just a visited marker, but that won't pick up the cycle. This will
-		int ctr = 0;        
-		Queue<Integer> q = new LinkedList<Integer>();
-		for(int x : graph.keySet()) {
-			if(inDegrees.get(x) == null) {
-				System.out.println("Starting with: "+x);
+```java
+private void topSort(HashMap<Integer, List<Integer>> graph, HashMap<Integer, Integer> inDegrees) throws  CycleFoundException {
+	// You could use just a visited marker, but that won't pick up the cycle. This will
+	int ctr = 0;        
+	Queue<Integer> q = new LinkedList<Integer>();
+	for(int x : graph.keySet()) {
+		if(inDegrees.get(x) == null) {
+			System.out.println("Starting with: "+x);
+			q.add(x);
+		}
+	}
+	
+	while(!q.isEmpty()) {
+		int source = q.poll();
+		// You can replace ctr with an Arraylist of the values, if you want to print them
+		ctr++;
+		for(int x : graph.get(source)) {
+			inDegrees.put(x, inDegrees.get(x)-1);
+			if(inDegrees.get(x) == 0) {
 				q.add(x);
 			}
 		}
-		
-		while(!q.isEmpty()) {
-			int source = q.poll();
-			// You can replace ctr with an Arraylist of the values, if you want to print them
-			ctr++;
-			for(int x : graph.get(source)) {
-				inDegrees.put(x, inDegrees.get(x)-1);
-				if(inDegrees.get(x) == 0) {
-					q.add(x);
-				}
-			}
-		}
-		if(ctr != graph.keySet().size()) {
-			throw new CycleFoundException();
-		}
 	}
-	```
+	if(ctr != graph.keySet().size()) {
+		throw new CycleFoundException();
+	}
+}
+```
 
 ### Shortest Path Algorithms
 - For an unweighted graph, it's the smallest amount of edges that need to be traversed to go from vertex i to vertex j
@@ -633,33 +653,33 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 #### Unweighted Graph:
 - A simple <b>breath first search works</b>, where you track the distances
 
-	```java
-	void bfs_path(Vertex root) {
-		Queue<Vertex> q = new Queue<Vertex>();
-		for Vertex x in allVertices {
-			x.dist = INFINITY;
-		}
-
-		root.dist = 0;
-		
-		q.enqueue(root);
-
-		while(!q.isEmpty()) {
-			Vertex v = q.dequeue();
-			List<Vertex> adjList = q.adjList;
-
-			for(Vertex w in adjList) {
-				// We use the dist to check if it's been visited
-				if(w.dist == INFINITY) {
-					w.dist = v.dist + 1;
-					w.path = v;
-					q.enqueue(w);
-				}
-			}
-
-		}
+```java
+void bfs_path(Vertex root) {
+	Queue<Vertex> q = new Queue<Vertex>();
+	for Vertex x in allVertices {
+		x.dist = INFINITY;
 	}
-	```
+
+	root.dist = 0;
+	
+	q.enqueue(root);
+
+	while(!q.isEmpty()) {
+		Vertex v = q.dequeue();
+		List<Vertex> adjList = q.adjList;
+
+		for(Vertex w in adjList) {
+			// We use the dist to check if it's been visited
+			if(w.dist == INFINITY) {
+				w.dist = v.dist + 1;
+				w.path = v;
+				q.enqueue(w);
+			}
+		}
+
+	}
+}
+```
 
 	- <b>Note: For both BFS and Topsort, the format is the same. You use a queue, keep checking if it's empty after enqueue-ing the root. You iterate through the adjacent values, and add them to the queue if they fulfil a condition. You also need to mark them as visited somehow</b>
 
@@ -674,81 +694,81 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 
 - Priority Queue solution (for sparse graphs)
 
-	```java
-	void dijkstra(Vertex s) {
-    
-		for (Vertex v in allVertices) {
-			v.dist = INFINITY;
-			v.known = false;
-		}
+```java
+void dijkstra(Vertex s) {
 
-		/* 
-		Using a priority queue with the distance as the comparison
-		allows for us to access the element with the shortest
-		distance from the src without an extra loop
-		*/
-		pq.add(new Node(s.value,0));
+	for (Vertex v in allVertices) {
+		v.dist = INFINITY;
+		v.known = false;
+	}
 
-		while(!pq.isEmpty()) {
+	/* 
+	Using a priority queue with the distance as the comparison
+	allows for us to access the element with the shortest
+	distance from the src without an extra loop
+	*/
+	pq.add(new Node(s.value,0));
 
-			Vertex v = pq.remove();
-			v.known = true;
+	while(!pq.isEmpty()) {
 
-			// Now, evaluate the neighbours. The PQ must be updated as the distance changes
-			List<Vertex> adjVertices = v.adj;
+		Vertex v = pq.remove();
+		v.known = true;
 
-			for(Vertex w in adjVertices) {
-				// Visit only if it's not known
-				if(!w.known && w.distance != INFINITY) {
-					int distance = getCost(v,w);
-					// Relaxation step, and set path to w as v
-					if(w.dist > v.dist + distance) {
-						w.dist = v.dist + distance;
-						w.path = v;
-					}
-					priorityQueue.add(new Node(w,v.dist+distance));
+		// Now, evaluate the neighbours. The PQ must be updated as the distance changes
+		List<Vertex> adjVertices = v.adj;
+
+		for(Vertex w in adjVertices) {
+			// Visit only if it's not known
+			if(!w.known && w.distance != INFINITY) {
+				int distance = getCost(v,w);
+				// Relaxation step, and set path to w as v
+				if(w.dist > v.dist + distance) {
+					w.dist = v.dist + distance;
+					w.path = v;
 				}
+				priorityQueue.add(new Node(w,v.dist+distance));
 			}
 		}
 	}
-	```
+}
+```
 
 - Regular Solution
 
-	```java
-	// unknownExists goes through the nodes, and checks if any have v.known == false
-	// getSmallestDistanceUnknownNeighbour goes through the graph's adjacency list, and gets the unknown node with the smallest distance
+```java
+// unknownExists goes through the nodes, and checks if any have v.known == false
+// getSmallestDistanceUnknownNeighbour goes through the graph's adjacency list, and gets the unknown node with the smallest distance
 
-	void dijkstra(Vertex s) {
-	
-		for (Vertex v in allVertices) {
-			v.dist = INFINITY;
-			v.known = false;
-		}
+void dijkstra(Vertex s) {
 
-		s.dist = 0;
+	for (Vertex v in allVertices) {
+		v.dist = INFINITY;
+		v.known = false;
+	}
 
-		while(unknownExists(s)) {
-			// Get the one with the smallest distance - Greedy
-			Vertex v = getSmallestDistanceUnknown(s);
-			v.known = true;
+	s.dist = 0;
 
-			List<Vertex> adjVertices = v.adj;
+	while(unknownExists(s)) {
+		// Get the one with the smallest distance - Greedy
+		Vertex v = getSmallestDistanceUnknown(s);
+		v.known = true;
 
-			for(Vertex w in adjVertices) {
-				// Visit only if it's not known
-				if(!w.known) {
-					int distance = getCost(v,w);
-					// Relaxation step, and set path to w as v
-					if(w.dist > v.dist + distance) {
-						w.dist = v.dist + distance;
-						w.path = v;
-					}
+		List<Vertex> adjVertices = v.adj;
+
+		for(Vertex w in adjVertices) {
+			// Visit only if it's not known
+			if(!w.known) {
+				int distance = getCost(v,w);
+				// Relaxation step, and set path to w as v
+				if(w.dist > v.dist + distance) {
+					w.dist = v.dist + distance;
+					w.path = v;
 				}
 			}
 		}
 	}
-	```
+}
+```
 
 #### Weighted Graph (Negative values) - Bellman Ford
 - Meant to fix Dijkstra's biggest drawback: negative edges
@@ -764,42 +784,42 @@ Algorithm:
 - Bellman Ford fails for graphs with negative weight cycles
 	- How do you detect? After |V|-1 relaxations, relax one more time. If there's another change, then there's a negative edge cycle
 
-	```java
-	void dijkstra(Vertex s) throws NegativeCycleException {
-		for (Vertex v in allVertices) {
-			v.dist = INFINITY;
-			v.known = false;
-		}
+```java
+void dijkstra(Vertex s) throws NegativeCycleException {
+	for (Vertex v in allVertices) {
+		v.dist = INFINITY;
+		v.known = false;
+	}
 
-		s.dist = 0;
+	s.dist = 0;
 
-		while(unknownExists(s)) {
-			// Get the one with the smallest distance - Greedy
-			Vertex v = getSmallestDistanceUnknown(s);
-			v.known = true;
+	while(unknownExists(s)) {
+		// Get the one with the smallest distance - Greedy
+		Vertex v = getSmallestDistanceUnknown(s);
+		v.known = true;
 
-			// Run it v-1 times
-			for(int i = 1; i < VERT_COUNT; i++) {
-				for(Edge e : getEdges(v)) {
-					Node u = e.source;
-					Node v = e.target;
-					// Check, and set prev as well
-					relax(u,v);
-				}
-			}
-
-			// This is to check for the presence of negative edge cycles
-			for(Edge e : getEdges()) {
+		// Run it v-1 times
+		for(int i = 1; i < VERT_COUNT; i++) {
+			for(Edge e : getEdges(v)) {
 				Node u = e.source;
 				Node v = e.target;
-				if(checkForRelax(u,v)) {
-					throw new NegativeCycleException();
-				}
+				// Check, and set prev as well
+				relax(u,v);
 			}
-			// At this point, we should have it implemented. 
 		}
+
+		// This is to check for the presence of negative edge cycles
+		for(Edge e : getEdges()) {
+			Node u = e.source;
+			Node v = e.target;
+			if(checkForRelax(u,v)) {
+				throw new NegativeCycleException();
+			}
+		}
+		// At this point, we should have it implemented. 
 	}
-	```
+}
+```
 
 
 #### Depth First Search
@@ -808,26 +828,26 @@ Algorithm:
 - Isn't that useful by itself, but while augmented, it can perform things like counting connected components, determining connectivity, etc
 - You literally plunge into any node, and traverse all the edges, backtracking when you can't go to any other node from a position. Once you backtrack, <b>then</b> you continue the exploration.
 
-	```python
-	n = (nodes)
-	g = [adjacency list]
-	v = [false, false, false,...] # Visited
+```python
+n = (nodes)
+g = [adjacency list]
+v = [false, false, false,...] # Visited
 
-	function dfs(at):
-		ivf visited[at]:
-			# If already visited, then just return
-			return
-		# Do whatever you want to do here
-		visited[at] = True
-		# Get the neighbours, and go thorugh each one
-		neighbours = g[at]
-		for node in neighbours:
-			# DFS each neighbour node
-			dfs(node)
+function dfs(at):
+	ivf visited[at]:
+		# If already visited, then just return
+		return
+	# Do whatever you want to do here
+	visited[at] = True
+	# Get the neighbours, and go thorugh each one
+	neighbours = g[at]
+	for node in neighbours:
+		# DFS each neighbour node
+		dfs(node)
 
-	start = 0
-	dfs(0)
-	```
+start = 0
+dfs(0)
+```
 
 #### Comparing DFS vs BFS
 
@@ -839,30 +859,30 @@ Algorithm:
 
 - Finding connected components:
 	- Counting multiple disjoint componenets. Start dfs at [0,n] and find the number of connected elements. This helps you find multiple connected componenets
-	
-	```python
-	n = (nodes)
-	g = [adjacency list]
-	v = [false, false, false,...] # Visited
-	count = 0
-	function dfs(at):
-		if visited[at]:
-			# If already visited, then just return
-			return
-		visited[at] = True
-		components[at] = count
-		# Get the neighbours, and go thorugh each one
-		neighbours = g[at]
-		for node in neighbours:
-			# DFS each neighbour node
-			dfs(node)
-	def findComponents():
-		for(i in range(0, n)):
-			if !visited[i]:
-				count += 1
-				dfs(i)
-		return (count, componenets)
-	```
+
+```python
+n = (nodes)
+g = [adjacency list]
+v = [false, false, false,...] # Visited
+count = 0
+function dfs(at):
+	if visited[at]:
+		# If already visited, then just return
+		return
+	visited[at] = True
+	components[at] = count
+	# Get the neighbours, and go thorugh each one
+	neighbours = g[at]
+	for node in neighbours:
+		# DFS each neighbour node
+		dfs(node)
+def findComponents():
+	for(i in range(0, n)):
+		if !visited[i]:
+			count += 1
+			dfs(i)
+	return (count, componenets)
+```
 
 - Another implementation of DFS involves using a Stack to track vertices which we're yet to explore.
 	- Visit an arbitraty vertex, and find any <b>one</b> connected vertex.
@@ -873,62 +893,62 @@ Algorithm:
 
 - Deepclone a graph (using BFS):
 
-	```java
-	public Node cloneGraph(Node node) {
-        HashMap<Node,Node> visited = new HashMap<Node,Node>();
-        Queue<Node> q = new LinkedList<Node>();
+```java
+public Node cloneGraph(Node node) {
+    HashMap<Node,Node> visited = new HashMap<Node,Node>();
+    Queue<Node> q = new LinkedList<Node>();
+    
+    visited.put(node, new Node(node.val, new ArrayList()));
+    q.add(node);
+    
+    while(!q.isEmpty()) {
+        Node src = q.poll();
+        Node target = visited.get(src);
         
-        visited.put(node, new Node(node.val, new ArrayList()));
-        q.add(node);
-        
-        while(!q.isEmpty()) {
-            Node src = q.poll();
-            Node target = visited.get(src);
-            
-            if(src.neighbors != null) {
-                List<Node> nn = src.neighbors;
-                for(Node x : nn) {
-                    Node subTarget = visited.get(x);
-                    if(subTarget == null) {
-                        subTarget = new Node(x.val, new ArrayList());
-                        visited.put(x, subTarget);
-                        q.add(x);
-                    }
-                    target.neighbors.add(subTarget);
+        if(src.neighbors != null) {
+            List<Node> nn = src.neighbors;
+            for(Node x : nn) {
+                Node subTarget = visited.get(x);
+                if(subTarget == null) {
+                    subTarget = new Node(x.val, new ArrayList());
+                    visited.put(x, subTarget);
+                    q.add(x);
                 }
+                target.neighbors.add(subTarget);
             }
         }
-        return visited.get(node);
     }
-	```
+    return visited.get(node);
+}
+```
 
 - Using DFS to find cycles (Can also use TopSort):
 
-	```python
-	def isCyclicUtil(v, visited, recStack): 
-		visited[v] = True
-        recStack[v] = True
-        # Recur for all neighbours - if any neighbour is visited and in recStack then graph is cyclic 
-        for neighbour in graph[v]: 
-            if visited[neighbour] == False: 
-                if isCyclicUtil(neighbour, visited, recStack) == True: 
-                    return True
-            elif recStack[neighbour] == True: 
+```python
+def isCyclicUtil(v, visited, recStack): 
+	visited[v] = True
+    recStack[v] = True
+    # Recur for all neighbours - if any neighbour is visited and in recStack then graph is cyclic 
+    for neighbour in graph[v]: 
+        if visited[neighbour] == False: 
+            if isCyclicUtil(neighbour, visited, recStack) == True: 
                 return True
-        # The node needs to be poped from the recursion stack before function ends 
-        recStack[v] = False
-        return False
-    # Returns true if graph is cyclic
-    # You essentially BFS, and see if the same node is visited multiple times - if so, this implies that the graph is cyclic
-    def isCyclic(): 
-        visited = [False] * V 
-        recStack = [False] * V 
-        for node in range(V): 
-            if visited[node] == False: 
-                if isCyclicUtil(node,visited,recStack) == True: 
-                    return True
-        return False
-    ```
+        elif recStack[neighbour] == True: 
+            return True
+    # The node needs to be poped from the recursion stack before function ends 
+    recStack[v] = False
+    return False
+# Returns true if graph is cyclic
+# You essentially BFS, and see if the same node is visited multiple times - if so, this implies that the graph is cyclic
+def isCyclic(): 
+    visited = [False] * V 
+    recStack = [False] * V 
+    for node in range(V): 
+        if visited[node] == False: 
+            if isCyclicUtil(node,visited,recStack) == True: 
+                return True
+    return False
+```
 
 - Some other uses: Minimum spanning tree, check for bipartite, check for strongly connected components, topological sorting, generate mazes.
 
@@ -957,44 +977,44 @@ Algorithm:
 - Splits the array based on the middle value, and keeps searching
 - Works for sorted arrays
 
-	```python
-	def binarySearch(arr, x):
-		l = 0
-		r = len(arr)-1
-		# Loop while left is less than right
-		while(l < r):
-			# Set the middle, work based on this
-			mid = l+((r-l)/2)
-			# If you find it, get out
-			if arr[mid] == x:
-				return mid
-			# If the middle is too big, use the first half
-			else if arr[mid] > x:
-				r = mid-1
-			# If the middle is too small, use the second half
-			else:
-				l = mid+1
-		# If nothing worked, it doesn't exist
-		return -1
+```python
+def binarySearch(arr, x):
+	l = 0
+	r = len(arr)-1
+	# Loop while left is less than right
+	while(l < r):
+		# Set the middle, work based on this
+		mid = l+((r-l)/2)
+		# If you find it, get out
+		if arr[mid] == x:
+			return mid
+		# If the middle is too big, use the first half
+		else if arr[mid] > x:
+			r = mid-1
+		# If the middle is too small, use the second half
+		else:
+			l = mid+1
+	# If nothing worked, it doesn't exist
+	return -1
 
-	def rec_binarySearch(arr, left, right, x): 
-		# Check base case
-		if(l > r):
-			return -1
-		mp = (r - l)/2
-		mid = l + mp
-		# If element is present at the middle itself 
-		if arr[mid] == x: 
-			return mid 
-		# If element is smaller than mid, then it  
-		# can only be present in left subarray 
-		elif arr[mid] > x: 
-			return binarySearch(arr, l, mid-1, x) 
-		# Else the element can only be present  
-		# in right subarray 
-		else: 
-			return binarySearch(arr, mid+1, r, x) 
-	```
+def rec_binarySearch(arr, left, right, x): 
+	# Check base case
+	if(l > r):
+		return -1
+	mp = (r - l)/2
+	mid = l + mp
+	# If element is present at the middle itself 
+	if arr[mid] == x: 
+		return mid 
+	# If element is smaller than mid, then it  
+	# can only be present in left subarray 
+	elif arr[mid] > x: 
+		return binarySearch(arr, l, mid-1, x) 
+	# Else the element can only be present  
+	# in right subarray 
+	else: 
+		return binarySearch(arr, mid+1, r, x) 
+```
 
 # Topic 2: Sorting Algorithms
 
