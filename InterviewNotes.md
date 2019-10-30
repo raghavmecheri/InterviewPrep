@@ -216,12 +216,12 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- Array of Stacks (or ArrayList). When stacks[i] overflows, move to stacks[i+1]. Track the stack that's at the top, to pop and push from that.
 - Queue using 2 Stacks:
 	- Solution:
-		- <b>To Insert:</b> If s1 != empty => pushAll(s1, s2); Then, pushAll(s2,s1);
+		- <b>To Insert:</b> If s1 != empty => pushAll(s1, s2); Then, push input to s1 followed up by pushAll(s2,s1);
 		- To dequeue, just pop from s1
 		- Ref <a href="https://www.geeksforgeeks.org/queue-using-stacks/">here</a>
 - Sort Stack:
-	- Poelements out from the input stack. With the popped element, push all the temp elements into the input stacks that are bigger than the element popped from the input stack. Once this is done, push the input pop into the temp stack. Repeat this for every input element. This way, you're basically popping out elements, and recycling them until you find the right one.
-	
+	- Pop elements out from the input stack. With the popped element, push all the temp elements into the input stacks that are bigger than the element popped from the input stack. Once this is done, push the input pop into the temp stack. Repeat this for every input element. This way, you're basically popping out elements, and recycling them until you find the right one.
+	- O(n^2) complexity
 ```java
 public static Stack<Integer> sortstack(Stack<Integer> input) { 
 	Stack<Integer> tmpStack = new Stack<Integer>(); 
@@ -310,11 +310,10 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 	TreeNode left = lowestCommonAncestor(root.left, p, q);
 	TreeNode right = lowestCommonAncestor(root.right, p, q);
 
-    if(left != null && right != null) {
-        return root;
-    }
-
-    return left == null ? right : left;
+	if(left != null && right != null) {
+		return root;
+	}
+	return left == null ? right : left;
 }
 ```
 
@@ -401,7 +400,7 @@ private BinaryNode removeNode(BinaryNode root, int x) {
 		if(root.left != null && root.right != null) {
 			// Here, you find the smallest value on the right, and move that to the root
 			// Once that's done, just remove the value that was moved to the root
-			int replace = minMin(root.right).value;
+			int replace = findMin(root.right).value;
 			root.value = replace;
 			t.right = removeNode(root.right, replace);
 
@@ -513,6 +512,7 @@ class Solution {
 - You insert an element at the position that you percolate to
 
 ```java
+// This is for a minheap
 void insert(int x) {
 	if(currentSize == array.length - 1) {
 		enlargeArray(array.length*2 -1);
@@ -521,6 +521,7 @@ void insert(int x) {
 	int hole = ++currentSize;
 	// array[0] is always a placeholder
 	for(array[0] = x; x < array[hole/2]; hole/=2) {
+		// As long as the element is less, keep moving the hole up as you move the elements down
 		array[hole] = array[hole/2];
 	}
 	array[hole] = x;
@@ -559,7 +560,7 @@ void percolateDown(int hole) {
 			break;
 		}
 	}
-	array[hole] = temp;
+	array[hole] = t;
 }
 ```
 
@@ -637,7 +638,8 @@ private void topSort(HashMap<Integer, List<Integer>> graph, HashMap<Integer, Int
 	
 	while(!q.isEmpty()) {
 		int source = q.poll();
-		// You can replace ctr with an Arraylist of the values, if you want to print them
+		// Add it to a list, print it, say source.order = ctr, whatever
+		useNode(source);
 		ctr++;
 		for(int x : graph.get(source)) {
 			inDegrees.put(x, inDegrees.get(x)-1);
@@ -688,7 +690,7 @@ void bfs_path(Vertex root) {
 }
 ```
 
-	- <b>Note: For both BFS and Topsort, the format is the same. You use a queue, keep checking if it's empty after enqueue-ing the root. You iterate through the adjacent values, and add them to the queue if they fulfil a condition. You also need to mark them as visited somehow</b>
+- <b>Note: For both BFS and Topsort, the format is the same. You use a queue, keep checking if it's empty after enqueue-ing the root. You iterate through the adjacent values, and add them to the queue if they fulfil a condition. You also need to mark them as visited somehow</b>
 
 #### Weighted Graph (No negative values) - Dijkstra's Algorithm
 - Shortest path between the starting node, and any other node in the graph
@@ -726,7 +728,7 @@ void dijkstra(Vertex s) {
 
 		for(Vertex w in adjVertices) {
 			// Visit only if it's not known
-			if(!w.known && w.distance != INFINITY) {
+			if(!w.known) {
 				int distance = getCost(v,w);
 				// Relaxation step, and set path to w as v
 				if(w.dist > v.dist + distance) {
@@ -841,10 +843,11 @@ g = [adjacency list]
 v = [false, false, false,...] # Visited
 
 function dfs(at):
-	ivf visited[at]:
+	if visited[at]:
 		# If already visited, then just return
 		return
 	# Do whatever you want to do here
+	processNode(at) # Do something with at
 	visited[at] = True
 	# Get the neighbours, and go thorugh each one
 	neighbours = g[at]
@@ -896,7 +899,7 @@ def findComponents():
 	- Push the original vertex to the Stack, and start exploring the vertex you just navigated to
 	- Carry this on, suspending vertices and adding them to the Stack. When you don't have any edges on a vertex, <b>revert</b> to an earlier vertex by popping the stack
 
-##### Problems uses
+#### Problems
 
 - Deepclone a graph (using BFS):
 
