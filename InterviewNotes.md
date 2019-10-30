@@ -936,8 +936,9 @@ public Node cloneGraph(Node node) {
 
 ```python
 def isCyclicUtil(v, visited, recStack): 
-	visited[v] = True
+    visited[v] = True
     recStack[v] = True
+
     # Recur for all neighbours - if any neighbour is visited and in recStack then graph is cyclic 
     for neighbour in graph[v]: 
         if visited[neighbour] == False: 
@@ -945,11 +946,13 @@ def isCyclicUtil(v, visited, recStack):
                 return True
         elif recStack[neighbour] == True: 
             return True
+
     # The node needs to be poped from the recursion stack before function ends 
     recStack[v] = False
     return False
+
 # Returns true if graph is cyclic
-# You essentially BFS, and see if the same node is visited multiple times - if so, this implies that the graph is cyclic
+# You essentially DFS, and see if the same node is visited multiple times - if so, this implies that the graph is cyclic
 def isCyclic(): 
     visited = [False] * V 
     recStack = [False] * V 
