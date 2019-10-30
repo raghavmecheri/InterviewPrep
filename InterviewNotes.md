@@ -198,6 +198,12 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 - Usually used to store items to preserve order
 - Queues can be <b>directly</b> implemented using LinkedLists.
 
+### Dequeues
+
+- Double ended queues
+- Insertion and deletion are involved from both ends of the queue [Double Ended Queue]
+- Dequeue doesn't conform to LIFO and FIFO - it can if you want it do, but it doesn't <b>have</b> to
+
 ### Common Questions
 
 - Single Array to maintain 3 stacks:
@@ -329,7 +335,8 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 - For every node, the values of the nodes on the left sub-tree are smaller than their root, and the values of the nodes on the right sub-tree are larger than their root
 - Note: Most of these functions return the <b>new root of the sub-tree</b>
 - Time taken is dependant on the height: logn to n
-- For a BST, checking if an element exists is O(logn) as it's <b>divide and conquer</b> like binary search is
+- An <b>in order</b> traversal of a BST is the elements in increasing order
+- For a BST, checking if an element exists is O(logn) as it's <b>divide and conquer</b> like binary search
 
 ```java
 boolean contains(root, int x) {
