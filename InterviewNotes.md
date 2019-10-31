@@ -97,12 +97,11 @@ SOPln(s.toString());
 
 ```java
 private void permute(String str, int l, int r) { 
-    if (l == r) 
-        System.out.println(str); 
-    else
-    { 
-        for (int i = l; i <= r; i++) 
-        { 
+    if (l == r) {
+	System.out.println(str);
+	} 
+    else { 
+        for (int i = l; i <= r; i++) { 
             str = swap(str,l,i); 
             permute(str, l+1, r); 
             str = swap(str,l,i); 
@@ -160,6 +159,7 @@ Class Node {
 		- If no buffer is allowed, then use MergeSort and then remove duplicates from a sorted LL 
 - K'th to the last:
 	- Go to the end, to find the length. (length - k) => number of elements to go through. Then, iterate again and return 
+	- Use a runner which is k places ahead. When the runner reaches the end, your main pointer will be k'th to the last
 - Deleting a node:
 	- Go until you find it, and skip: O(n)
 - Partition around a value:
@@ -210,8 +210,9 @@ Another Implementation: Use a LinkedList, and hold the last element as the top e
 	- Maintain a single stack, with 0, (len-1)/2, and len-1 being the indexes of the beginnings of the three stacks. The first and third stack would grow in opposite directions, while the second stack would grow in either direction
 	- Another way to do this would be to structure it such that there is a secondary array that holds the parent for each node. All the other elements would be <a href="https://prismoskills.appspot.com/lessons/Programming_Puzzles/Multiple_stacks_in_single_array.jsp">linked to the parent</a>
 - Stack Min [to always return the minimum element]:
-	- Track the min element during insertion
-	- Pop each one one by one, until you find the smallest one
+	- Just maintain a PQ alongside the stack
+	- When you pop, remove the element from the PQ as well
+	- For getMin() just peek the PQ
 - SetOfStacks: 
 	- Array of Stacks (or ArrayList). When stacks[i] overflows, move to stacks[i+1]. Track the stack that's at the top, to pop and push from that.
 - Queue using 2 Stacks:
@@ -389,13 +390,13 @@ BinaryNode insert(int data, BinaryNode root) {
 
 ```java
 private BinaryNode removeNode(BinaryNode root, int x) {
-	if(t == null) {
-		return t;
+	if(root == null) {
+		return root;
 	}
 	if(root.value.compareTo(x) > 0) {
-		return contains(root.left, x);
+		return removeNode(root.left, x);
 	} else if(root.value.compareTo(x) < 0) {
-		return contains(root.right, x);
+		return removeNode(root.right, x);
 	} else {
 		if(root.left != null && root.right != null) {
 			// Here, you find the smallest value on the right, and move that to the root
@@ -407,15 +408,14 @@ private BinaryNode removeNode(BinaryNode root, int x) {
 		} else {
 			root = (root.left != null) ? root.left : root.right;
 		}
-		// We're at the node we need to remove
-
 	}
+	return root;
 }
 ```
 
 - Average case for a BST is O(logn), but the worst case is when you add a list of ascending/descending values. In this case, the BST becomes a LinkedList, and is fairly useless. In order to combat this, you need a <b>self adjusting (AVL) tree</b>
 
-#### AVL Trees
+#### AVL Trees (eh)
 - Eliminate the issue with Binary Trees, which can turn them into O(N) LinkedLists
 - Is self adjusting, uses rotations to ensure that it always fulfils a few conditions, which ensure that it's always O(logn)
 - Works based on <b>rotations</b>, which basically involve pulling the position of the nodes in order to convert a BST of larger height into one of a lower height
@@ -559,6 +559,7 @@ void percolateDown(int hole) {
 		} else {
 			break;
 		}
+		hole = child;
 	}
 	array[hole] = t;
 }
@@ -574,9 +575,6 @@ void percolateDown(int hole) {
 - For example, each path down the tree can be used to indicate complete words. Each list can be terminated by a special node.
 - Generally, a trie can be used to store the entire english language for quick prefix lookups. Since you go down and have various branches (like a tree) it's far more effective than a HashMap is for completion options. A HashMap would be far more efficient for absolute checks.
 - A trie can check if a string is a valid prefix in O(n), where n -> length of the string
-
-### AVL Trees
-- Trees that automatically do rotations to become BST's - used to combat the issues faced by using BSTs.
 
 ### Graphs
 - Tree is a type of graph, but not all graphs are trees. Trees are connected graphs without cycles.
@@ -735,7 +733,7 @@ void dijkstra(Vertex s) {
 					w.dist = v.dist + distance;
 					w.path = v;
 				}
-				priorityQueue.add(new Node(w,v.dist+distance));
+				priorityQueue.add(w);
 			}
 		}
 	}
@@ -782,7 +780,7 @@ void dijkstra(Vertex s) {
 #### Weighted Graph (Negative values) - Bellman Ford
 - Meant to fix Dijkstra's biggest drawback: negative edges
 - Uses Dynamic Programming, relax all edges |V| - 1 times
-- You cover all possible paths
+- You cover all possible paths<br>
 Algorithm:
 - Prepare a list of all possible edges
 - Mark the distance of all the possible edges from the source as infinity
@@ -794,7 +792,7 @@ Algorithm:
 	- How do you detect? After |V|-1 relaxations, relax one more time. If there's another change, then there's a negative edge cycle
 
 ```java
-void dijkstra(Vertex s) throws NegativeCycleException {
+void bellmanFord(Vertex s) throws NegativeCycleException {
 	for (Vertex v in allVertices) {
 		v.dist = INFINITY;
 		v.known = false;
@@ -1073,20 +1071,14 @@ void selectionSort(int[] arr) {
 ### Algorithm
 
 ```java
-void bubbleSort(int[] arr) {
-    boolean swapped = true;
-    int j = 0;
-
-    while (swapped) {
-        swapped = false;
-        for (int i = 1; i < arr.length - j; i++) {
-            if (arr[i - 1] > arr[i]) {
-                swap(arr, i - 1, i);
-                swapped = true;
-            }
-        }
-        j++;
-    }
+public void bubble(int[] arr) {
+	for(int i = 0; i < arr.length-1; i++) {
+		for(int j = 0; j < arr.length-1; j++) {
+			if(arr[j]  > arr[j+1]) {
+				swap(arr[j], arr[j+1]);
+			}
+		}
+	}
 }
 ```
 
