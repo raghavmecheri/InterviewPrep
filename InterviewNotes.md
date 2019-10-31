@@ -413,6 +413,46 @@ private BinaryNode removeNode(BinaryNode root, int x) {
 }
 ```
 
+- Serialise and deserialise a binary tree
+
+```java
+private String serialise(Node root) {
+	if(root == null) {
+		return "X,";
+	}
+
+	String left = serialise(root.left);
+	String right = serialise(root.right);
+	// The left and right trees will end with commas on their own
+	return root.val + "," + left + right;
+
+}
+
+private Node deserialise(String target) {
+	Queue<String> nodes = new LinkedList<String>();
+	nodes.addAll(target.split(","));
+	return recursiveDS(nodes);
+}
+
+private Node recursiveDS(Queue<String>nodesLeft) {
+	String nodeVal = nodesLeft.poll();
+	
+	// Base case
+	if (nodeVal == "X") {
+		return null;
+	}
+
+	Node root = new Node(Integer.valueOf(nodeVal));
+	
+	// Populate subtrees
+	root.left(recursiveDS(nodesLeft));
+	root.right(recursiveDS(nodesRight));
+
+	return root
+}
+
+```
+
 - Average case for a BST is O(logn), but the worst case is when you add a list of ascending/descending values. In this case, the BST becomes a LinkedList, and is fairly useless. In order to combat this, you need a <b>self adjusting (AVL) tree</b>
 
 #### AVL Trees (eh)
